@@ -16,112 +16,144 @@
       <ion-button>
         <ion-icon name="ellipsis-horizontal-circle-outline" class="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
-
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid *ngIf="stepCount <= 2">
-    <ion-row>
-      <ion-col class="ion-text-right" (click)="nextStep(stepCount)">
-        <a  class="continue"> Continue</a>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <form [formGroup]="aboutSchoolForm" *ngIf="step1" class="ion-padding">
-    <h3>ABOUT THE SCHOOL</h3><br>
-    <ion-list>
-      <ion-item>
+
+  <div class="form"
+    [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
+    <ion-grid *ngIf="stepCount <= 2">
+      <ion-row>
+        <ion-col class="ion-text-right" (click)="nextStep(stepCount)">
+          <a class="continue"> Continue</a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <form [formGroup]="aboutSchoolForm" *ngIf="step1" class="ion-padding">
+      <h3>ABOUT THE SCHOOL</h3><br>
+      <ion-list class="border-input">
         <ion-label position="stacked">School name
         </ion-label>
-        <ion-input type="text" formControlName="schoolName" name="schoolName" required></ion-input>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item>
+        <ion-item>
+          <ion-input type="text" formControlName="schoolName" name="schoolName" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.schoolName">
+            <div class="error-message"
+              *ngIf="aboutSchoolForm.get('schoolName').hasError(validation.type) && (aboutSchoolForm.get('schoolName').dirty || aboutSchoolForm.get('schoolName').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </ion-list>
+      <ion-list class="border-input">
         <ion-label position="stacked">School type
         </ion-label>
-        <ion-select formControlName="schoolType" name="schoolType" multiple="false" required>
-          <ion-select-option *ngFor="let type of schoolTypes" value="{{type.name}}">
-            {{type.name}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item>
+        <ion-item>
+          <ion-select formControlName="schoolType" name="schoolType" multiple="false" required>
+            <ion-select-option *ngFor="let type of schoolTypes" value="{{type.name}}">
+              {{type.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.schoolType">
+            <div class="error-message"
+              *ngIf="aboutSchoolForm.get('schoolType').hasError(validation.type) && (aboutSchoolForm.get('schoolType').dirty || aboutSchoolForm.get('schoolType').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </ion-list>
+      <ion-list class="border-input">
         <ion-label position="stacked">School location
         </ion-label>
-        <ion-input type="text" formControlName="schoolLocation" name="schoolLocation" required
-          placeholder="Add Zip Code"></ion-input>
-      </ion-item>
-    </ion-list>
-  </form>
-  <form [formGroup]="schoolFundForm" *ngIf="step2">
-    <ion-list>
-      <ion-item class="ion-padding">
-        <ion-textarea formControlName="aboutSchoolFunds" name="aboutSchoolFunds" required placeholder="ABOUT THE SCHOOL FUNDS"
-          rows="5"></ion-textarea>
-      </ion-item>
-      <ion-item class="ion-padding">
-        <ion-label>Staff Points</ion-label>
-        <ion-toggle formControlName="staffPoints" name="staffPoints"></ion-toggle>
-      </ion-item>
-      <p class="ion-padding">
-        If OFF means you will receive the *Charly Points.
-      </p>
-    </ion-list>
-  </form>
-  <form [formGroup]="aboutOwnerForm" *ngIf="step3" class="ion-padding">
-    <h3>ABOUT YOU</h3><br>
-    <ion-list>
-      <ion-item>
+        <ion-item>
+          <ion-input type="text" formControlName="schoolLocation" name="schoolLocation" required
+            placeholder="Add Zip Code"></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.schoolLocation">
+            <div class="error-message"
+              *ngIf="aboutSchoolForm.get('schoolLocation').hasError(validation.type) && (aboutSchoolForm.get('schoolLocation').dirty || aboutSchoolForm.get('schoolLocation').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </ion-list>
+    </form>
+    <form [formGroup]="schoolFundForm" *ngIf="step2">
+      <ion-list>
+        <ion-item class="ion-padding">
+          <ion-textarea formControlName="aboutSchoolFunds" name="aboutSchoolFunds" required
+            placeholder="ABOUT THE School Fund$" rows="5"></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <ion-list>
+        <ion-item class="ion-padding">
+          <ion-label class="staff-points">Staff Points</ion-label>
+          <ion-toggle formControlName="staffPoints" name="staffPoints" placeholder="Staff Points"></ion-toggle>
+        </ion-item>
+        <p class="ion-padding">
+          If OFF means you will receive the *Charly Points.
+        </p>
+      </ion-list>
+    </form>
+
+    <form [formGroup]="aboutOwnerForm" *ngIf="step3" class="ion-padding">
+      <h3>ABOUT YOU</h3><br>
+      <ion-list class="border-input">
         <ion-label position="stacked">Your Full name
         </ion-label>
-        <ion-input type="text" formControlName="fullName" name="fullName" required></ion-input>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item>
+        <ion-item>
+
+          <ion-input type="text" formControlName="fullName" name="fullName" required></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-list class="border-input">
         <ion-label position="stacked">Your Mobile
         </ion-label>
-        <ion-input type="text" formControlName="mobileNumber" name="mobileNumber" required></ion-input>
-      </ion-item>
+        <ion-item>
 
-    </ion-list>
-    <P>Confirming text to validate your membership will be send after pressing continue.</P>
-  </form>
-  <form [formGroup]="schoolExposureForm" *ngIf="step4" class="ion-padding" (ngSubmit)="onSumbit()">
-    <ion-list>
-      <ion-item class="ion-padding">
+          <ion-input type="text" formControlName="mobileNumber" name="mobileNumber" required></ion-input>
+        </ion-item>
+
+      </ion-list>
+      <P class="ion-text-left">Confirming text to validate your membership will be send after pressing continue.</P>
+    </form>
+    <form [formGroup]="schoolExposureForm" *ngIf="step4" (ngSubmit)="onSubmit()">
+      <ion-list class="school-exposure-input">
         <ion-label position="stacked">Photo</ion-label>
-        <div class=no-photo></div>
-        <ion-img [src]="image" alt="avatar" *ngIf="image"></ion-img>
-        <input type="file" accept="image/*" formControlName="photo" name="photo" (change)="readUrl($event, 'avatar')"
-          *ngIf="!image">
+        <ion-item class="ion-padding" lines="none">
+          <div class=no-photo></div>
+          <ion-img [src]="image" alt="avatar" *ngIf="image"></ion-img>
+          <input type="file" accept="image/*" formControlName="photo" name="photo" (change)="readUrl($event, 'avatar')"
+            *ngIf="!image">
 
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item class="ion-padding">
+        </ion-item>
+      </ion-list>
+      <ion-list class="school-exposure-input">
         <ion-label position="stacked">Type School description </ion-label>
-        <ion-textarea formControlName="schoolDescription" name="schoolDescription" required
-          placeholder="Type School description" rows="5"></ion-textarea>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item class="ion-padding">
-        <ion-label position="stacked">Achievement plans (for what you need fund$) </ion-label>
-        <ion-textarea formControlName="schoolAchievement" name="schoolAchievement" required
-          placeholder="Achievement plans (for what you need fund$)" rows="4"></ion-textarea>
-      </ion-item>
-    </ion-list>
-    <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-button type="submit" >Submit</ion-button>
-      </ion-col>
-    </ion-row>
+        <ion-item class="ion-padding">
 
-  </form>
+          <ion-textarea formControlName="schoolDescription" name="schoolDescription" required
+            placeholder="Type School description" rows="4"></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <ion-list class="school-exposure-input">
+        <ion-label position="stacked">Achievement plans (for what you need fund$) </ion-label>
+        <ion-item class="ion-padding">
+          <ion-textarea formControlName="schoolAchievement" name="schoolAchievement" required
+            placeholder="Achievement plans (for what you need fund$)" rows="4"></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-button type="submit">Submit</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
 </ion-content>

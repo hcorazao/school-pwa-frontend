@@ -1,0 +1,44 @@
+ion-content {
+    .logo-text {
+        p {
+            width: 50%;
+            text-align: center;
+            margin: auto;
+        }
+    }
+
+    img {
+        height: 80px;
+    }
+
+    ion-list {
+        background: transparent;
+    }
+
+    ion-button {
+        width: 50%;
+        --border-radius: 20px;
+    }
+    ion-list.border-input {
+        background: transparent;
+        ion-item {
+            border: 1px solid #ddd;
+        }
+    
+        ion-label {
+            float: left;
+            min-width: 100%;
+            font-size: 19px;
+            text-align: left;
+            height: 34px;
+            color: var(--ion-text-heading-color);
+        }
+    }
+    h5 {
+        line-height: 0;
+    }
+
+    p {
+        color: var(--ion-text-heading-color);
+    }
+}

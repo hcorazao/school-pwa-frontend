@@ -1,4 +1,4 @@
-import { ToastController, LoadingController } from '@ionic/angular';
+import { ToastController, LoadingController, AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
@@ -20,6 +20,7 @@ export class UtilService {
   constructor(
     public toastCtrl: ToastController,
     public loadingController: LoadingController,
+    public alertCtrl:AlertController
 
   ) {
   }
@@ -89,5 +90,13 @@ export class UtilService {
 
     this.keepAfterRouteChange = keepAfterNavigationChange;
     this.subject.next({ type: 'error', text: message });
+  }
+  async presentWarningAlert(msg) {
+    const alert = await this.alertCtrl.create({
+      message: msg,
+      buttons: ['OK'],
+      cssClass: 'alert-danger'
+    });
+    await alert.present();
   }
 }

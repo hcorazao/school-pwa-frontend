@@ -13,6 +13,7 @@ ion-icon.back {
     margin-left: 13px;
     color: var(--ion-back-btn-color);
 }
+
 ion-button.btn-back {
     z-index: 99999;
     cursor: pointer;
@@ -22,7 +23,41 @@ ion-button.btn-back {
     text-decoration: none;
 }
 
+ion-list.border-input {
+    background: transparent;
+
+    ion-item {
+        border: 1px solid #ddd;
+    }
+
+    ion-label {
+        float: left;
+        min-width: 100%;
+        font-size: 19px;
+        text-align: left;
+        height: 34px;
+    }
+}
+
+ion-list.school-exposure-input {
+    background: transparent;
+    margin: 0px 0px !important;
+    ion-label {
+        float: left;
+        min-width: 100%;
+        font-size: 19px;
+        text-align: left;
+        padding-left: 25px;
+    }
+    img {
+        height: 86px;
+    object-fit: cover;
+    width: 400px;
+    }
+}
+
 ion-list {
+
     margin: 6px 0px !important;
 
     img {
@@ -41,16 +76,20 @@ ion-list {
 
 }
 
+ion-textarea {
+    color: var(--ion-text-heading-color) !important;
+}
 h3 {
     color: var(--ion-text-heading-color);
 }
 
 input[accept*="image"] {
-    opacity: 0;
+    // opacity: 0;
     top: 0;
-    height: 95px;
+    height: 75px;
     text-align: center;
     width: 100%;
+    cursor: pointer;
 }
 
 .no-photo {

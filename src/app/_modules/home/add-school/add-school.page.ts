@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { LoadingController } from '@ionic/angular';
-import { first } from 'rxjs/operators';
+import { LoadingController, ModalController } from '@ionic/angular';
+import { Motion } from '@capacitor/core';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { OtpVerificationComponent } from 'src/app/shared/components/otp-verification/otp-verification.component';
 @Component({
   selector: 'app-add-school',
   templateUrl: 'add-school.page.html',
@@ -39,14 +41,25 @@ export class AddSchoolPage {
     { id: 2, name: 'Private' },
     { id: 3, name: 'Magnet' },
   ]
-
+  orientationType;;
   constructor(
     private authenticationService: AuthenticationService,
+    public screenOrientation: ScreenOrientation,
     private router: Router,
     public utilService: UtilService,
     private formBuilder: FormBuilder,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public modalCtrl: ModalController,
+    public utiService: UtilService
   ) {
+    this.orientationType = this.screenOrientation.type;
+    Motion.addListener('orientation', (event: OrientationType) => {
+
+      let type: any = event;
+      // console.log(type.srcElement.screen.orientation.type);
+      this.orientationType = type.srcElement.screen.orientation.type;
+      console.log(this.orientationType);
+    })
 
   }
 
@@ -76,9 +89,50 @@ export class AddSchoolPage {
   async ionViewDidEnter() {
 
   }
-  nextStep() {
-    this.stepCount = this.stepCount + 1;
-    this.onStpes();
+  async nextStep() {
+    if (this.stepCount < 2) {
+      this.stepCount = this.stepCount + 1;
+      this.onStpes();
+    }
+    else {
+      let params = {
+        mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
+        email: "schoolPWA@gmail.com",
+        countryCode: 91
+      }
+      await this.authenticationService.sendOTP(params)
+        .subscribe(
+          async (data: any) => {
+            console.log(data)
+            if (data.success == true) {
+              const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+
+              const modalOption: any = {
+                component: OtpVerificationComponent,
+                backdropDismiss: false,
+                componentProps: {
+                  from: formData,
+                  authyId: data.authyId
+                },
+              };
+              const modal = await this.modalCtrl.create(modalOption);
+              modal.onDidDismiss().then((data) => {
+                if (data.data == 'verified') {
+                  this.stepCount = this.stepCount + 1;
+                  this.onStpes();
+                }
+              });
+              return await modal.present();
+            }
+          },
+          error => {
+            console.log(error)
+            if (error.error == undefined) {
+              this.utiService.error(error);
+            } else { this.utiService.error(error.error); }
+          });
+    }
+
   }
 
   back() {
@@ -137,26 +191,38 @@ export class AddSchoolPage {
     }
   }
 
-  async onSumbit() {
+  async onSubmit() {
     this.router.navigate(['school']);
-    // this.submitted = true;
-    // let loading = await this.loadingCtrl.create({
-    //   message: "Creating account please wait..."
-    // });
-    // loading.present();
-    // const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+    this.submitted = true;
+    let loading = await this.loadingCtrl.create({
+      message: "Creating account please wait..."
+    });
+    loading.present();
+    const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
 
-    // await this.authenticationService.addSchool(params)
-    //   .then(
-    //     async data => {
-    //       console.log(data)
-    //       loading.dismiss();
-    //     },
-    //     error => {
-    //       loading.dismiss();
-    //       if (error.error == undefined) {
-    //         this.utiService.error(error);
-    //       } else { this.utiService.error(error.error); }
-    //     });
+    await this.authenticationService.addSchool(params)
+      .then(
+        async data => {
+          console.log(data)
+          loading.dismiss();
+        },
+        error => {
+          loading.dismiss();
+          if (error.error == undefined) {
+            this.utiService.error(error);
+          } else { this.utiService.error(error.error); }
+        });
+  }
+
+  validation_messages = {
+    'schoolName': [
+      { type: 'required', message: 'School Name is required.' },
+    ],
+    'schoolType': [
+      { type: 'required', message: 'School Type is required.' },
+    ],
+    'schoolLocation': [
+      { type: 'required', message: 'School Location is required.' },
+    ],
   }
 }

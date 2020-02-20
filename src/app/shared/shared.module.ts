@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleAutocompleteDirective } from '../shared/directives/google-autocomplete.directive';
+import { OtpVerificationComponent } from './components/otp-verification/otp-verification.component';
 
 @NgModule({
   imports: [
@@ -15,14 +16,17 @@ import { GoogleAutocompleteDirective } from '../shared/directives/google-autocom
   ],
   declarations: [
     GoogleAutocompleteDirective,
+    OtpVerificationComponent
   ],
   exports: [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
     GoogleAutocompleteDirective,
+    OtpVerificationComponent
   ],
   entryComponents: [
+    OtpVerificationComponent
   ],
 
 })

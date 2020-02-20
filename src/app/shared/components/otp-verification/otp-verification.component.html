@@ -1,0 +1,48 @@
+<ion-header>
+    <ion-toolbar color="light">
+        <ion-title class="ion-text-center">
+            SMS WITH CODE IS SENT
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [scrollEvents]="false">
+    <ion-grid>
+        <ion-row>
+            <ion-col class="ion-text-center logo-text">
+                <h5>*Charly</h5>
+                <img src="assets/images/Charly.png">
+                <p>Cooperation platform to achieve
+                    Extraordinary Things.</p>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ng-container *ngIf="!verified">
+        <form [formGroup]="otpForm" class="ion-padding" (ngSubmit)="onSumbit()">
+            <ion-list class="border-input">
+                <ion-label position="stacked">Enter Code </ion-label>
+                <ion-item>
+
+                    <ion-input formControlName="otp" name="otp" required></ion-input>
+                </ion-item>
+                <p class="ion-text-center">{{formData?.mobileNumber}}</p>
+            </ion-list>
+            <ion-row class="next-btn ion-text-center">
+                <ion-col>
+                    <ion-button type="submit" [disabled]="otpForm.invalid">Next</ion-button>
+                </ion-col>
+            </ion-row>
+        </form>
+    </ng-container>
+    <ng-container *ngIf="verified">
+        <p class="ion-text-center">
+            Thank you for your interest in representing The School A.<br>
+            <br>
+            We will notify you when the school principal recognizes your credentials.
+        </p>
+        <ion-row class="next-btn ion-text-center">
+            <ion-col>
+                <ion-button type="submit" (click)="onContinue()">Continue</ion-button>
+            </ion-col>
+        </ion-row>
+    </ng-container>
+</ion-content>

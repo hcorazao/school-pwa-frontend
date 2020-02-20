@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { AddSchoolPage } from './add-school.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { AddSchoolPage } from './add-school.page';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
+    SharedModule,
     RouterModule.forChild([
       {
         path: '',

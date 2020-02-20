@@ -7,9 +7,18 @@ ion-title {
         font-size: 11px;
     }
 }
+
+.landscape {
+    ion-list {
+        width: 60%;
+        text-align: center;
+        margin: auto;
+    }
+}
+
 ion-list {
     ion-label {
         color: var(--ion-text-heading-color);
-        line-height:2;
+        line-height: 2;
     }
 }

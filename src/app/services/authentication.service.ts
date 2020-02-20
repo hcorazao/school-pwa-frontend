@@ -22,16 +22,14 @@ export class AuthenticationService {
   }
 
   async addSchool(data) {
-    return this.http.post(`${this.url}/addSchool/`, data)
+    return this.http.post(`${this.url}/school/`, data)
   }
 
-  /*-------fetch the prices from realtime firebase database---------*/
-  async login(email: string, password: string): Promise<any> {
-
+  sendOTP(data) {
+    return this.http.post(`${this.url}/otp-send`, data)
   }
-
-  logout(uid) {
-
+  verifyOTP(data) {
+    return this.http.get(`${this.url}/otp-verify/?id=${data.otp}&token=${data.authyId}`)
   }
 
 }

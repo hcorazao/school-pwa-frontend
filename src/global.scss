@@ -51,3 +51,18 @@ h5 {
 ion-back-button {
     color:var(--ion-back-btn-color);
 }
+
+.form.landscape {
+    width: 50%;
+    text-align: center;
+    margin: auto;
+}
+a.continue {
+    cursor: pointer;
+}
+.validation-errors {
+    text-align: left;
+    color: var(--ion-color-danger);
+    font-size: 14px;
+    padding-top: 4px;
+}

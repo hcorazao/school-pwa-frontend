@@ -5,12 +5,14 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AddSchoolPageModule } from './_modules/home/add-school/add-school.module';
+import { ErrorInterceptor } from './_helpers';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,12 +21,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    AddSchoolPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
     SplashScreen,
     HttpClient,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    ScreenOrientation,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
