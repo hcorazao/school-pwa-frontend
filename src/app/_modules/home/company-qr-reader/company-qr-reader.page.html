@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-buttons slot="start" *ngIf="stepCount == 0">
+        <ion-back-button icon="arrow-back-circle" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="start" *ngIf="stepCount > 0" (click)="back()" class=btn-back>
+        <ion-icon name="arrow-back-circle" class="back"></ion-icon>
+      </ion-buttons>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      Add new QR Reader to your Company
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-horizontal-circle-outline" class="ellipsis-horizontal-circle-outline"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qr-reader-block ion-text-center" [routerLink]="['/staff-directory']">
+    <a>Copy and send the invitation link</a>
+    <p>Send the invitation with any other App or by Email.</p>
+  </div>
+</ion-content>

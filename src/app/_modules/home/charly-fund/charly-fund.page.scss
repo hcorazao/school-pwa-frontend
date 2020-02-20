@@ -1,0 +1,15 @@
+ion-title {
+    font-size: 15px;
+
+    p {
+        line-height: 0;
+        color: var(--ion-color-warning);
+        font-size: 11px;
+    }
+}
+ion-list {
+    ion-label {
+        color: var(--ion-text-heading-color);
+        line-height:2;
+    }
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MVP-front</string>
+    <string name="title_activity_main">MVP-front</string>
+    <string name="package_name">amaze.MVP.aos</string>
+    <string name="custom_url_scheme">amaze.MVP.aos</string>
+</resources>

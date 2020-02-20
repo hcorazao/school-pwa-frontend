@@ -1,0 +1,55 @@
+ion-title {
+    font-size: 15px;
+
+    p {
+        line-height: 0;
+        color: var(--ion-text-color);
+        font-size: 11px;
+    }
+}
+
+ion-icon.back {
+    font-size: 25px;
+    margin-left: 13px;
+    color: var(--ion-back-btn-color);
+}
+
+ion-button.btn-back {
+    z-index: 99999;
+    cursor: pointer;
+}
+
+.school-achievment-section {
+    background: var(--ion-color-primary-contrast);
+
+    a.add-achivment {
+        ion-icon {
+            font-size: 25px;
+            vertical-align: middle;
+            padding: 0 4px;
+        }
+    }
+}
+
+.directory {
+    ion-icon {
+        padding: 12px;
+        border-radius: 100%;
+        font-size: 25px;
+    }
+
+    span {
+        padding: 6px;
+        line-height: 2;
+    }
+
+    ion-icon.staff {
+        background: var(--ion-color-primary-contrast);
+        color: var(--ion-text-heading-color);
+    }
+
+    ion-icon.clubs {
+        background: var(--ion-color-warning);
+        color: var(--ion-color-primary-contrast);
+    }
+}

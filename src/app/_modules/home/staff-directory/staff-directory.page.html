@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-buttons slot="start">
+        <ion-back-button icon="arrow-back-circle" text=""></ion-back-button>
+      </ion-buttons>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      Schools Participating
+      <p>55 Schools in Tulsa</p>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-horizontal-circle-outline" class="ellipsis-horizontal-circle-outline"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-left">
+        <ion-icon name="search"></ion-icon>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <a [routerLink]="['/add-staff']" class="add-school"> New teacher ></a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <h5>Staff</h5>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" class="ion-text-left">
+        Quantity of members here
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list *ngFor="let item of participatingSchoolItems">
+    <ion-item>
+      <ion-avatar slot="start">
+        <img [src]="item.schoolIcon" alt="school" class="school">
+      </ion-avatar>
+      <ion-label>{{item.schoolName}}
+        <p>{{item.points}}</p>
+        <ion-button>Invited</ion-button>
+      </ion-label>
+      <ion-icon name="navigate-outline"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>

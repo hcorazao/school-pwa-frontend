@@ -1,0 +1,39 @@
+ion-title {
+    font-size: 15px;
+
+    p {
+        line-height: 0;
+        color: var(--ion-text-color);
+        font-size: 11px;
+    }
+}
+
+ion-col.location {
+    color: var(--ion-color-primary);
+
+    ion-icon {
+        margin-right: 10px;
+    }
+}
+
+.add-school {
+    text-decoration: none;
+}
+
+ion-list {
+    margin: 6px 0px !important;
+
+    img {
+        object-fit: cover;
+    }
+
+    img.admin {
+        height: 30px;
+        width: 30px;
+
+    }
+    ion-label {
+        color: var(--ion-text-heading-color);
+        line-height:2;
+    }
+}
