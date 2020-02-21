@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="light">
     <ion-buttons slot="start">
-      <ion-buttons slot="start" *ngIf="stepCount == 0">
+      <ion-buttons slot="start">
         <ion-back-button icon="arrow-back-circle" text=""></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="start" *ngIf="stepCount > 0" (click)="back()" class=btn-back>
@@ -9,7 +9,7 @@
       </ion-buttons>
     </ion-buttons>
     <ion-title class="ion-text-center">
-      {{title}}
+      {{schoolDetails?.schoolName}}
       <p>$545,698.34 had received</p>
     </ion-title>
     <ion-buttons slot="end">
@@ -22,49 +22,45 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col class="ion-text-right">
-        <a class="continue"> Direct contributions</a>
+  <div class="form"
+    [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-text-right">
+          <a class="continue"> Direct contributions</a>
 
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <div class="school-img">
-    <ion-img src="assets/images/school-img.jpg"></ion-img>
-  </div>
-  <div class="school-info ion-padding">
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-    magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-  </div>
-  <div class="school-achievment-section ion-padding">
-    <h5>Our plan of achivements</h5>
-    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-      dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-      kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-      sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-      voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-      sanctus est Lorem ipsum dolor sit amet.
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="school-img">
+      <ion-img src="assets/images/school-img.jpg"></ion-img>
+    </div>
+    <div class="school-info ion-padding">
+      {{schoolDetails?.schoolDescription }}
+    </div>
+    <div class="school-achievment-section ion-padding">
+      <h5>Our plan of achivements</h5>
+      <p>  {{schoolDetails?.schoolAchievement }}</p>
 
-    <a class="add-achivment">
-      <ion-icon name="add" slot="start"></ion-icon><span slot="end">Achievements</span>
-    </a>
-
-  </div>
-  <div class="directory ion-padding">
-    <h5>DIRECTORY</h5>
-    <ion-row>
-      <ion-col [routerLink]="['/add-staff']">
-        <ion-icon name="add"  class="staff"></ion-icon><br>
-        <span>Staff</span>
-      </ion-col>
-      <ion-col>
-        <ion-icon name="add" class="clubs"></ion-icon><br>
-        <span>Clubs</span>
-      </ion-col>
-      <ion-col>
-      </ion-col>
-    </ion-row>
+      <a class="add-achivment ion-text-left" >
+        <ion-icon name="add" slot="start"></ion-icon><span slot="end">Achievements</span>
+      </a>
+<br>
+    </div>
+    <div class="directory ion-padding">
+      <h5 class="ion-text-left">DIRECTORY</h5>
+      <ion-row>
+        <ion-col [routerLink]="['/add-staff']">
+          <ion-icon name="add" class="staff"></ion-icon><br>
+          <span>Staff</span>
+        </ion-col>
+        <ion-col>
+          <ion-icon name="add" class="clubs"></ion-icon><br>
+          <span>Clubs</span>
+        </ion-col>
+        <ion-col>
+        </ion-col>
+      </ion-row>
+    </div>
   </div>
 </ion-content>

@@ -43,6 +43,7 @@ ion-icon.ellipsis-horizontal-circle-outline {
 ion-title {
     color: var(--ion-text-heading-color);
     font-weight: 600;
+    text-transform: capitalize;
 }
 
 h5 {
@@ -51,7 +52,14 @@ h5 {
 ion-back-button {
     color:var(--ion-back-btn-color);
 }
-
+.section.landscape {
+    width: 60%;
+    text-align: center;
+    margin: auto;
+}
+ion-label {
+    text-transform: capitalize;
+}
 .form.landscape {
     width: 50%;
     text-align: center;
@@ -65,4 +73,7 @@ a.continue {
     color: var(--ion-color-danger);
     font-size: 14px;
     padding-top: 4px;
+}
+.searchbar-input.sc-ion-searchbar-md {
+    border-radius: 12px;
 }

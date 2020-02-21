@@ -24,7 +24,7 @@
     <ion-grid>
       <ion-row>
         <ion-col class="ion-text-left">
-          <ion-icon name="search"></ion-icon>
+          <ion-searchbar cancelButtonIcon showCancelButton="focus" cancelButtonText="cancel"></ion-searchbar>
         </ion-col>
         <ion-col class="ion-text-right">
           <a [routerLink]="['/add-school']" class="add-school"> Add a School</a>
@@ -34,34 +34,38 @@
     <h5 class="ion-text-left">SCHOOLS</h5>
     <ion-grid>
       <ion-row>
-        <ion-col size="4" class="ion-text-left">
-          441 Public
+        <ion-col size="3">
+          {{participatingSchool?.schoolPublic}} Public
         </ion-col>
-        <ion-col size="4" class="ion-text-right">
-          1,874 Magnet
+        <ion-col size="3">
+          {{participatingSchool?.schoolPrivate}} Private
         </ion-col>
-        <ion-col size="4" class="ion-text-right location">
+        <ion-col size="3">
+          {{participatingSchool?.schoolMagnet}} Magnet
+        </ion-col>
+        <ion-col size="3" class="location ion-text-right">
           <ion-icon name="location"></ion-icon><br>
           Tulsa
         </ion-col>
       </ion-row>
     </ion-grid>
 
-    <ion-list *ngFor="let item of participatingSchoolItems">
-      <ion-item>
+    <ion-list *ngFor="let item of participatingSchool.data">
+      <ion-item [routerLink]="['/school/',item._id]">
         <ion-avatar slot="start">
-          <img [src]="item.schoolIcon" alt="school" class="school">
+          <img [src]="(item?.photo && item?.photo != null) ? item.photo : 'assets/images/school.jpg'" alt="school"
+            class="school">
         </ion-avatar>
-        <ion-label>{{item.schoolName}}
-          <p>{{item.description}}</p>
+        <ion-label>{{item?.schoolName}}
+          <p>{{item?.schoolType}}</p>
         </ion-label>
-        <p>{{item.points}}</p>
+        <p>{{item?.points}}</p>
       </ion-item>
       <ion-item>
         <ion-avatar slot="start">
-          <img [src]="item.adminIcon" alt="admin" class="admin">
+          <img [src]="(item?.adminphoto) ? item.adminphoto : 'assets/images/user.jpg'" alt="admin" class="admin">
         </ion-avatar>
-        <ion-label>{{item.adminName}}
+        <ion-label>{{item?.fullName}}
         </ion-label>
         <ion-icon name="navigate-outline"></ion-icon>
       </ion-item>

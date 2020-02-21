@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="light">
     <ion-buttons slot="start">
-      <ion-buttons slot="start" *ngIf="stepCount == 0">
+      <ion-buttons slot="start">
         <ion-back-button icon="arrow-back-circle" text=""></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="start" *ngIf="stepCount > 0" (click)="back()" class=btn-back>
@@ -29,36 +29,61 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <form [formGroup]="staffForm" class="ion-padding" (ngSubmit)="onSumbit()">
-    <ion-list>
-      <ion-item>
+  <div class="form"
+    [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
+    <form [formGroup]="staffForm" class="ion-padding" (ngSubmit)="onSubmit()">
+      <ion-list class="border-input">
         <ion-label position="stacked">Staff name
         </ion-label>
-        <ion-input type="text" formControlName="staffName" name="staffName" required></ion-input>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item>
+        <ion-item>
+          <ion-input type="text" formControlName="staffName" name="staffName" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.staffName">
+            <div class="error-message"
+              *ngIf="staffForm.get('staffName').hasError(validation.type) && (staffForm.get('staffName').dirty || staffForm.get('staffName').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </ion-list>
+      <ion-list class="border-input">
         <ion-label position="stacked">Staff Mobile
         </ion-label>
-        <ion-input type="text" formControlName="staffMobile" name="staffMobile" required placeholder="Add Zip Code">
-        </ion-input>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item class="ion-padding">
-        <ion-label>*CHARLY Points</ion-label>
-        <ion-toggle formControlName="charlyPoints" name="charlyPoints"></ion-toggle>
-      </ion-item>
-      <p class="ion-padding">
-        If ON means this member will collect *Charly Points (1 *Charly Points = $1)
-      </p>
-    </ion-list>
-    <!-- <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-button type="submit">Submit</ion-button>
-      </ion-col>
-    </ion-row> -->
+        <ion-item>
+          <ion-input type="text" formControlName="mobileNumber" name="mobileNumber" required>
+          </ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.mobileNumber">
+            <div class="error-message"
+              *ngIf="staffForm.get('mobileNumber').hasError(validation.type) && (staffForm.get('mobileNumber').dirty || staffForm.get('mobileNumber').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+          <div class="error-message" *ngIf="staffForm.get('mobileNumber').hasError('minlength')">
+            Phone Number requied atleast 10 digits.
+          </div>
+          <div class="error-message" *ngIf="staffForm.get('mobileNumber').hasError('maxlength')">
+            Phone Number requied only 20 digits.
+          </div>
+        </div>
+      </ion-list>
+      <ion-list class="charly-points">
+        <ion-item class="ion-padding" lines="none">
+          <ion-label>*CHARLY Points</ion-label>
+          <ion-toggle formControlName="charlyPoints" name="charlyPoints" color="warning"></ion-toggle>
+        </ion-item>
+        <p class="ion-padding">
+          If ON means this member will collect *Charly Points (1 *Charly Points = $1)
+        </p>
+      </ion-list>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-button type="submit">Submit</ion-button>
+        </ion-col>
+      </ion-row>
 
-  </form>
+    </form>
+  </div>
 </ion-content>

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 const { Device } = Plugins;
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class SchoolService {
   url = environment.ApiURL;
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
@@ -20,12 +21,20 @@ export class AuthenticationService {
     });
   }
 
-  sendOTP(data) {
-    return this.http.post(`${this.url}/school/otp-send`, data)
+  addSchool(data) {
+    return this.http.post<any>(`${this.url}/school/add`, data);
   }
-  
-  verifyOTP(data) {
-    return this.http.get(`${this.url}/school/otp-verify/?id=${data.otp}&token=${data.authyId}`)
+
+  getSchoolList() {
+    return this.http.get<any>(`${this.url}/school/data`);
+  }
+
+  addStaff(data) {
+    return this.http.post<any>(`${this.url}/staff/add`, data);
+  }
+
+  getSchoolbyId(id) {
+    return this.http.get<any>(`${this.url}/school/` + id);
   }
 
 }

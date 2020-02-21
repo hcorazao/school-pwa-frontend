@@ -7,11 +7,13 @@ ion-title {
         font-size: 11px;
     }
 }
-.section.landscape {
-    width: 60%;
-    text-align: center;
+
+
+
+ion-col {
     margin: auto;
 }
+
 ion-col.location {
     color: var(--ion-color-primary);
 
@@ -26,7 +28,9 @@ ion-col.location {
 
 ion-list {
     margin: 6px 0px !important;
-
+    border: 1px solid var(--ion-color-medium-tint);
+    cursor: pointer;
+    border-radius: 5px;
     img {
         object-fit: cover;
     }
@@ -36,8 +40,9 @@ ion-list {
         width: 30px;
 
     }
+
     ion-label {
         color: var(--ion-text-heading-color);
-        line-height:2;
+        line-height: 2;
     }
 }

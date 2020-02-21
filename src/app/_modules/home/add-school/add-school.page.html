@@ -26,8 +26,10 @@
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
     <ion-grid *ngIf="stepCount <= 2">
       <ion-row>
-        <ion-col class="ion-text-right" (click)="nextStep(stepCount)">
-          <a class="continue"> Continue</a>
+        <ion-col class="ion-text-right">
+          <ion-button class="continue"
+            [disabled]="step1 && aboutSchoolForm.invalid || step2 && schoolFundForm.invalid || step3 && aboutOwnerForm.invalid"
+            (click)="nextStep(stepCount)"> Continue</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -85,17 +87,27 @@
       </ion-list>
     </form>
     <form [formGroup]="schoolFundForm" *ngIf="step2">
-      <ion-list>
+      <ion-list class="charly-points">
+        <ion-label class="about-school" position="stacked">ABOUT THE School Fund$</ion-label>
         <ion-item class="ion-padding">
           <ion-textarea formControlName="aboutSchoolFunds" name="aboutSchoolFunds" required
-            placeholder="ABOUT THE School Fund$" rows="5"></ion-textarea>
+           rows="5"></ion-textarea>
         </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.aboutSchoolFunds">
+            <div class="error-message"
+              *ngIf="schoolFundForm.get('aboutSchoolFunds').hasError(validation.type) && (schoolFundForm.get('aboutSchoolFunds').dirty || schoolFundForm.get('aboutSchoolFunds').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
       </ion-list>
-      <ion-list>
+      <ion-list class="charly-points">
         <ion-item class="ion-padding">
           <ion-label class="staff-points">Staff Points</ion-label>
-          <ion-toggle formControlName="staffPoints" name="staffPoints" placeholder="Staff Points"></ion-toggle>
+          <ion-toggle formControlName="staffPoints" name="staffPoints" color="warning"></ion-toggle>
         </ion-item>
+
         <p class="ion-padding">
           If OFF means you will receive the *Charly Points.
         </p>
@@ -111,25 +123,46 @@
 
           <ion-input type="text" formControlName="fullName" name="fullName" required></ion-input>
         </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.fullName">
+            <div class="error-message"
+              *ngIf="aboutOwnerForm.get('fullName').hasError(validation.type) && (aboutOwnerForm.get('fullName').dirty || aboutOwnerForm.get('fullName').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
       </ion-list>
       <ion-list class="border-input">
         <ion-label position="stacked">Your Mobile
         </ion-label>
         <ion-item>
-
           <ion-input type="text" formControlName="mobileNumber" name="mobileNumber" required></ion-input>
         </ion-item>
-
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.mobileNumber">
+            <div class="error-message"
+              *ngIf="aboutOwnerForm.get('mobileNumber').hasError(validation.type) && (aboutOwnerForm.get('mobileNumber').dirty || aboutOwnerForm.get('mobileNumber').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+          <div class="error-message" *ngIf="aboutOwnerForm.get('mobileNumber').hasError('minlength')">
+            Phone Number requied atleast 10 digits.
+          </div>
+          <div class="error-message" *ngIf="aboutOwnerForm.get('mobileNumber').hasError('maxlength')">
+            Phone Number requied only 20 digits.
+          </div>
+        </div>
+        
       </ion-list>
       <P class="ion-text-left">Confirming text to validate your membership will be send after pressing continue.</P>
     </form>
-    <form [formGroup]="schoolExposureForm" *ngIf="step4" (ngSubmit)="onSubmit()">
+    <form [formGroup]="schoolExposureForm" *ngIf="step4" (ngSubmit)="onSubmit(2982937)">
       <ion-list class="school-exposure-input">
         <ion-label position="stacked">Photo</ion-label>
         <ion-item class="ion-padding" lines="none">
           <div class=no-photo></div>
           <ion-img [src]="image" alt="avatar" *ngIf="image"></ion-img>
-          <input type="file" accept="image/*" formControlName="photo" name="photo" (change)="readUrl($event, 'avatar')"
+          <input type="file" accept="image/*" formControlName="photo" name="photo" (change)="readUrl($event)"
             *ngIf="!image">
 
         </ion-item>
@@ -141,6 +174,14 @@
           <ion-textarea formControlName="schoolDescription" name="schoolDescription" required
             placeholder="Type School description" rows="4"></ion-textarea>
         </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.schoolDescription">
+            <div class="error-message"
+              *ngIf="schoolExposureForm.get('schoolDescription').hasError(validation.type) && (schoolExposureForm.get('schoolDescription').dirty || schoolExposureForm.get('schoolDescription').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
       </ion-list>
       <ion-list class="school-exposure-input">
         <ion-label position="stacked">Achievement plans (for what you need fund$) </ion-label>
@@ -148,10 +189,18 @@
           <ion-textarea formControlName="schoolAchievement" name="schoolAchievement" required
             placeholder="Achievement plans (for what you need fund$)" rows="4"></ion-textarea>
         </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.schoolAchievement">
+            <div class="error-message"
+              *ngIf="schoolExposureForm.get('schoolAchievement').hasError(validation.type) && (schoolExposureForm.get('schoolAchievement').dirty || schoolExposureForm.get('schoolAchievement').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
       </ion-list>
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button type="submit">Submit</ion-button>
+          <ion-button type="submit" [disabled]="schoolExposureForm.invalid">Submit</ion-button>
         </ion-col>
       </ion-row>
     </form>

@@ -7,6 +7,8 @@ import { Motion } from '@capacitor/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OtpVerificationComponent } from 'src/app/shared/components/otp-verification/otp-verification.component';
+import { SchoolService } from '../../../services/school.service';
+import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-add-school',
   templateUrl: 'add-school.page.html',
@@ -45,6 +47,7 @@ export class AddSchoolPage {
   constructor(
     private authenticationService: AuthenticationService,
     public screenOrientation: ScreenOrientation,
+    public schoolService: SchoolService,
     private router: Router,
     public utilService: UtilService,
     private formBuilder: FormBuilder,
@@ -54,11 +57,8 @@ export class AddSchoolPage {
   ) {
     this.orientationType = this.screenOrientation.type;
     Motion.addListener('orientation', (event: OrientationType) => {
-
       let type: any = event;
-      // console.log(type.srcElement.screen.orientation.type);
       this.orientationType = type.srcElement.screen.orientation.type;
-      console.log(this.orientationType);
     })
 
   }
@@ -72,12 +72,12 @@ export class AddSchoolPage {
 
     this.schoolFundForm = this.formBuilder.group({
       aboutSchoolFunds: new FormControl('', Validators.required),
-      staffPoints: new FormControl('', Validators.required),
+      staffPoints: new FormControl(true),
     });
 
     this.aboutOwnerForm = this.formBuilder.group({
       fullName: new FormControl('', Validators.required),
-      mobileNumber: new FormControl('', Validators.required),
+      mobileNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(14), Validators.pattern(/^[+-]?\d+$/)]),
     });
 
     this.schoolExposureForm = this.formBuilder.group({
@@ -90,47 +90,51 @@ export class AddSchoolPage {
 
   }
   async nextStep() {
+    console.log(this.stepCount)
     if (this.stepCount < 2) {
       this.stepCount = this.stepCount + 1;
       this.onStpes();
     }
     else {
-      let params = {
-        mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
-        email: "schoolPWA@gmail.com",
-        countryCode: 91
-      }
-      await this.authenticationService.sendOTP(params)
-        .subscribe(
-          async (data: any) => {
-            console.log(data)
-            if (data.success == true) {
-              const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+      this.stepCount = this.stepCount + 1;
+      this.onStpes();
+      // let params = {
+      //   mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
+      //   email: "schoolPWA@gmail.com",
+      //   countryCode: 91
+      // }
+      // await this.authenticationService.sendOTP(params)
+      //   .subscribe(
+      //     async (data: any) => {
+      //       console.log(data)
+      //       if (data.success == true) {
+      //         const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
 
-              const modalOption: any = {
-                component: OtpVerificationComponent,
-                backdropDismiss: false,
-                componentProps: {
-                  from: formData,
-                  authyId: data.authyId
-                },
-              };
-              const modal = await this.modalCtrl.create(modalOption);
-              modal.onDidDismiss().then((data) => {
-                if (data.data == 'verified') {
-                  this.stepCount = this.stepCount + 1;
-                  this.onStpes();
-                }
-              });
-              return await modal.present();
-            }
-          },
-          error => {
-            console.log(error)
-            if (error.error == undefined) {
-              this.utiService.error(error);
-            } else { this.utiService.error(error.error); }
-          });
+      //         const modalOption: any = {
+      //           component: OtpVerificationComponent,
+      //           backdropDismiss: false,
+      //           componentProps: {
+      //             from: formData,
+      //             authyId: data.authyId
+      //           },
+      //         };
+      //         const modal = await this.modalCtrl.create(modalOption);
+      //         modal.onDidDismiss().then(async (res) => {
+      //           if (res.data == 'verified') {
+      //             this.stepCount = this.stepCount + 1;
+      //             this.onStpes();
+      //             await this.onSubmit(data.authyId);
+      //           }
+      //         });
+      //         return await modal.present();
+      //       }
+      //     },
+      //     error => {
+      //       console.log(error)
+      //       if (error.error == undefined) {
+      //         this.utiService.error(error);
+      //       } else { this.utiService.error(error.error); }
+      //     });
     }
 
   }
@@ -177,34 +181,40 @@ export class AddSchoolPage {
     }
   }
   /*-------Read image url import from libraby----*/
-  readUrl(event, imageType) {
+  readUrl(event) {
     if (event.target.files && event.target.files[0]) {
       let name = event.target.files[0].name;
-      let formData = new FormData();
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
+      let reader = new FileReader();
       reader.onload = (_event) => {
         this.image = reader.result;
       }
-      formData.append('image_url', event.target.files[0], name);
+      let formData = new FormData();
+      let params = { name: event.target.files[0].url, type: event.target.files[0].type, filename: name, private: false }
+      this.schoolExposureForm.value.photo = params;
+      // formData.append('image_url', event.target.files[0], name);
       reader.readAsDataURL(event.target.files[0]);
     }
+
   }
 
   async onSubmit() {
-    this.router.navigate(['school']);
-    this.submitted = true;
     let loading = await this.loadingCtrl.create({
-      message: "Creating account please wait..."
+      message: "Creating school please wait..."
     });
     loading.present();
-    const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
-
-    await this.authenticationService.addSchool(params)
-      .then(
-        async data => {
-          console.log(data)
-          loading.dismiss();
+    let id = {
+      authyId: 96789799
+    }
+    const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value, ...id };
+    console.log(params);
+    await this.schoolService.addSchool(params)
+      .subscribe(
+        async (data: any) => {
+          if (data.success == true) {
+            this.utiService.presentToast(data.success);
+            loading.dismiss();
+            this.router.navigate(['school']);
+          }
         },
         error => {
           loading.dismiss();
@@ -216,13 +226,31 @@ export class AddSchoolPage {
 
   validation_messages = {
     'schoolName': [
-      { type: 'required', message: 'School Name is required.' },
+      { type: 'required', message: 'School name is required.' },
     ],
     'schoolType': [
-      { type: 'required', message: 'School Type is required.' },
+      { type: 'required', message: 'School type is required.' },
     ],
     'schoolLocation': [
-      { type: 'required', message: 'School Location is required.' },
+      { type: 'required', message: 'School location is required.' },
+    ],
+    'aboutSchoolFunds': [
+      { type: 'required', message: 'School funds is required.' },
+    ],
+    'fullName': [
+      { type: 'required', message: 'Full name is required.' },
+    ],
+    'mobileNumber': [
+      { type: 'required', message: 'Mobile number is required.' },
+      { type: 'pattern', message: 'Invalid Input only numbers allowed for the mobile number.' },
+      { type: 'minLength', message: 'Phone number  Min 10 digit.' },
+      { type: 'maxLength', message: 'Phone number  Max 10 digit.' }
+    ],
+    'schoolDescription': [
+      { type: 'required', message: 'School Description is required.' },
+    ],
+    'schoolAchievement': [
+      { type: 'required', message: 'School Achievement is required.' },
     ],
   }
 }

@@ -17,7 +17,7 @@
   <div class="cus-list"
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
     <ion-list>
-      <ion-item *ngFor="let item of schoolItems" (click)="routePage(item?.route)">
+      <ion-item *ngFor="let item of schoolItems" (click)="routePage(item?.route)" lines="none">
         <ion-label class="ion-text-wrap">{{item.name}}
           <p *ngIf="item?.description">{{item?.description}}</p>
         </ion-label>

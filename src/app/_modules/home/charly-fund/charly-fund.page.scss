@@ -13,12 +13,18 @@ ion-title {
         width: 60%;
         text-align: center;
         margin: auto;
+      
     }
 }
 
 ion-list {
+    padding-bottom: 0px !important;
     ion-label {
         color: var(--ion-text-heading-color);
         line-height: 2;
+    }
+    ion-item {
+        border-bottom: 1px solid var(--ion-color-medium-tint);
+        cursor: pointer;
     }
 }

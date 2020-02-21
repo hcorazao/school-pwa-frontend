@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddSchoolPageModule } from './_modules/home/add-school/add-school.module';
 import { ErrorInterceptor } from './_helpers';
+import { SchoolService } from './services/school.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { ErrorInterceptor } from './_helpers';
     SplashScreen,
     HttpClient,
     ScreenOrientation,
+    SchoolService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

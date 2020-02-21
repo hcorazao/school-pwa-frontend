@@ -5,6 +5,7 @@ import {
 import { Motion } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 const { Clipboard } = Plugins;
 
@@ -14,15 +15,21 @@ const { Clipboard } = Plugins;
   styleUrls: ['staff-directory.page.scss'],
 })
 export class StaffDirectoryPage {
+  orientationType;
+
   public participatingSchoolItems = [
     { schoolName: 'Teacher name', schoolIcon: 'assets/images/school.jpg', adminIcon: 'assets/images/user.png', description: 'Club membership name', points: '545 *Points received' },
     { schoolName: 'Teacher name', schoolIcon: 'assets/images/school.jpg', adminIcon: 'assets/images/user.png', description: 'Club membership name', points: '545 *Points received' },
   ]
   constructor(
-    private router: Router,
+    private screenOrientation: ScreenOrientation,
     public utilService: UtilService
   ) {
-
+    this.orientationType = this.screenOrientation.type;
+    Motion.addListener('orientation', (event: OrientationType) => {
+      let type: any = event;
+      this.orientationType = type.srcElement.screen.orientation.type;
+    })
   }
 
   ngOnInit() {

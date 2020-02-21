@@ -14,6 +14,18 @@ ion-icon.back {
     color: var(--ion-back-btn-color);
 }
 
+ion-select {
+    width: 100%;
+}
+
+ion-button.continue {
+    --background: transparent;
+    --border: 0px;
+    --box-shadow: none;
+    color: var(--ion-color-primary);
+    cursor: pointer;
+}
+
 ion-button.btn-back {
     z-index: 99999;
     cursor: pointer;
@@ -39,9 +51,23 @@ ion-list.border-input {
     }
 }
 
+ion-list.charly-points {
+    background: var(--ion-color-primary-contrast);
+
+    ion-item {
+        --background: transparent;
+    }
+
+    ion-label {
+        color: var(--ion-text-heading-color) !important;
+        padding-left: 10px;
+    }
+}
+
 ion-list.school-exposure-input {
     background: transparent;
     margin: 0px 0px !important;
+
     ion-label {
         float: left;
         min-width: 100%;
@@ -49,11 +75,19 @@ ion-list.school-exposure-input {
         text-align: left;
         padding-left: 25px;
     }
+
     img {
         height: 86px;
-    object-fit: cover;
-    width: 400px;
+        object-fit: cover;
+        width: 400px;
     }
+}
+
+ion-label.about-school {
+    float: left;
+    font-size: 21px;
+    width: 100%;
+    color: var(--ion-text-heading-color) !important;
 }
 
 ion-list {
@@ -79,8 +113,10 @@ ion-list {
 ion-textarea {
     color: var(--ion-text-heading-color) !important;
 }
+
 h3 {
     color: var(--ion-text-heading-color);
+    text-align: left;
 }
 
 input[accept*="image"] {

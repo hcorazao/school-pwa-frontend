@@ -26,11 +26,8 @@ export class CharlyFundPage {
   ) {
     this.orientationType = this.screenOrientation.type;
     Motion.addListener('orientation', (event: OrientationType) => {
-
       let type: any = event;
-      // console.log(type.srcElement.screen.orientation.type);
       this.orientationType = type.srcElement.screen.orientation.type;
-      console.log(this.orientationType);
     })
 
   }

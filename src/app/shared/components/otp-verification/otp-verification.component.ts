@@ -29,6 +29,7 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
     public loadingCtrl: LoadingController,
     public router: Router,
     public modalCtrl: ModalController) {
+
     let params = navParams.data;
     if (params.modal.ComponentProps != undefined) {
       this.formData = params.modal.ComponentProps.formData;
@@ -40,13 +41,13 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
       otp: new FormControl('', Validators.required),
     });
   }
-  ionViewDidEnter() {
 
-  }
+  ionViewDidEnter() { }
 
   ngOnDestroy() {
     // this.unsubscribe();
   }
+
   async onSumbit() {
     let loading = await this.loadingCtrl.create({
       message: "Creating account please wait..."
