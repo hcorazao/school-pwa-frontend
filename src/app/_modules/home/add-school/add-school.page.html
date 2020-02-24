@@ -10,7 +10,7 @@
     </ion-buttons>
     <ion-title class="ion-text-center">
       {{title}}
-      <p>{{(stepCount <= 2) ? 'for #abetterkindofworld' : '$545,698.34 had received'}}</p>
+      <!-- <p>{{(stepCount <= 2) ? 'for #abetterkindofworld' : '$545,698.34 had received'}}</p> -->
     </ion-title>
     <ion-buttons slot="end">
       <ion-button>
@@ -29,7 +29,7 @@
         <ion-col class="ion-text-right">
           <ion-button class="continue"
             [disabled]="step1 && aboutSchoolForm.invalid || step2 && schoolFundForm.invalid || step3 && aboutOwnerForm.invalid"
-            (click)="nextStep(stepCount)"> Continue</ion-button>
+            (click)="nextStep()"> Continue</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -54,7 +54,7 @@
         <ion-label position="stacked">School type
         </ion-label>
         <ion-item>
-          <ion-select formControlName="schoolType" name="schoolType" multiple="false" required>
+          <ion-select formControlName="schoolType" name="schoolType" multiple="false" placeholder="Select School Type" required>
             <ion-select-option *ngFor="let type of schoolTypes" value="{{type.name}}">
               {{type.name}}
             </ion-select-option>
@@ -162,7 +162,7 @@
         <ion-item class="ion-padding" lines="none">
           <div class=no-photo></div>
           <ion-img [src]="image" alt="avatar" *ngIf="image"></ion-img>
-          <input type="file" accept="image/*" formControlName="photo" name="photo" (change)="readUrl($event)"
+          <input type="file" accept="image/*"  (change)="readUrl($event)"
             *ngIf="!image">
 
         </ion-item>

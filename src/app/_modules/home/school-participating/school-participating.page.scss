@@ -31,6 +31,7 @@ ion-list {
     border: 1px solid var(--ion-color-medium-tint);
     cursor: pointer;
     border-radius: 5px;
+
     img {
         object-fit: cover;
     }
@@ -44,5 +45,11 @@ ion-list {
     ion-label {
         color: var(--ion-text-heading-color);
         line-height: 2;
+    }
+
+    hr {
+        background: #ddd;
+        height: 1px;
+        width: 90%;
     }
 }

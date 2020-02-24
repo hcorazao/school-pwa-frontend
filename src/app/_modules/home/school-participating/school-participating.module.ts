@@ -5,12 +5,14 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { SchoolParticipatingPage } from './school-participating.page';
+import { SearchFilterModule } from 'src/app/shared/pipes/search-pipe.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    SearchFilterModule,
     RouterModule.forChild([
       {
         path: '',

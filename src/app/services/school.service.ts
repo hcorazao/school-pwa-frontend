@@ -25,8 +25,8 @@ export class SchoolService {
     return this.http.post<any>(`${this.url}/school/add`, data);
   }
 
-  getSchoolList() {
-    return this.http.get<any>(`${this.url}/school/data`);
+  getSchoolList(page) {
+    return this.http.get<any>(`${this.url}/school/data/?page=` + page);
   }
 
   addStaff(data) {
@@ -35,6 +35,10 @@ export class SchoolService {
 
   getSchoolbyId(id) {
     return this.http.get<any>(`${this.url}/school/` + id);
+  }
+
+  getStaff(page) {
+    return this.http.get<any>(`${this.url}/staff/data/?page=` + page);
   }
 
 }

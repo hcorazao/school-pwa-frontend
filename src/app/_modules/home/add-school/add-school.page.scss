@@ -15,7 +15,11 @@ ion-icon.back {
 }
 
 ion-select {
-    width: 100%;
+    min-width: 100%;
+    text-align: left;
+    margin: auto;
+    float: left;
+    padding: 0;
 }
 
 ion-button.continue {
@@ -45,7 +49,7 @@ ion-list.border-input {
     ion-label {
         float: left;
         min-width: 100%;
-        font-size: 19px;
+        // font-size: 19px;
         text-align: left;
         height: 34px;
     }

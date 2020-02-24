@@ -4,9 +4,6 @@
       <ion-buttons slot="start">
         <ion-back-button icon="arrow-back-circle" text=""></ion-back-button>
       </ion-buttons>
-      <ion-buttons slot="start" *ngIf="stepCount > 0" (click)="back()" class=btn-back>
-        <ion-icon name="arrow-back-circle" class="back"></ion-icon>
-      </ion-buttons>
     </ion-buttons>
     <ion-title class="ion-text-center">
       SENT INVITATION TO A STAFF
@@ -25,7 +22,7 @@
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-right">
-        <a class="continue" [routerLink]="['/qr-reader']"> Continue</a>
+        <ion-button class="continue" [disabled]="staffForm.invalid" (click)="onSubmit()"> Continue</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -80,7 +77,7 @@
       </ion-list>
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button type="submit">Submit</ion-button>
+          <ion-button type="submit" [disabled]="staffForm.invalid">Submit</ion-button>
         </ion-col>
       </ion-row>
 

@@ -11,6 +11,7 @@ ion-title {
 .school-info {
     text-align: justify;
 }
+
 ion-icon.back {
     font-size: 25px;
     margin-left: 13px;
@@ -27,6 +28,7 @@ ion-button.btn-back {
 
     a.add-achivment {
         float: left;
+        cursor: pointer;
         ion-icon {
             font-size: 25px;
             vertical-align: middle;
@@ -50,10 +52,12 @@ ion-button.btn-back {
     ion-icon.staff {
         background: var(--ion-color-primary-contrast);
         color: var(--ion-text-heading-color);
+        cursor: pointer;
     }
 
     ion-icon.clubs {
         background: var(--ion-color-warning);
         color: var(--ion-color-primary-contrast);
+        cursor: pointer;
     }
 }

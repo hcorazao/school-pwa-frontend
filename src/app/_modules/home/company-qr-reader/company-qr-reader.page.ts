@@ -5,11 +5,13 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { LoadingController } from '@ionic/angular';
 import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+
 @Component({
   selector: 'app-company-qr-reader',
   templateUrl: 'company-qr-reader.page.html',
   styleUrls: ['company-qr-reader.page.scss'],
 })
+
 export class CompanyQrReaderPage {
 
   public staffForm: FormGroup;
@@ -32,14 +34,12 @@ export class CompanyQrReaderPage {
       staffMobile: new FormControl('', Validators.required),
       charlyPoints: new FormControl('', Validators.required),
     });
-
   }
+
   async ionViewDidEnter() {
 
   }
 
-  
-  
   async onSumbit() {
     this.router.navigate(['school']);
     // this.submitted = true;
@@ -62,4 +62,5 @@ export class CompanyQrReaderPage {
     //       } else { this.utiService.error(error.error); }
     //     });
   }
+
 }

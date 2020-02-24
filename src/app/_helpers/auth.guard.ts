@@ -10,11 +10,10 @@ export class AuthGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         /*------------Current user token--------*/
-        // this.uid = localStorage.getItem('uid');
-        // console.log(this.uid)
-        // if (this.uid) {
+
+        // if (authorised) {
         //     // authorised so return true
-            // return true;
+        // return true;
         // }
 
         // not logged in so redirect to login page with the return url

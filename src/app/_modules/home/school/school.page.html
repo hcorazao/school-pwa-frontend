@@ -4,13 +4,10 @@
       <ion-buttons slot="start">
         <ion-back-button icon="arrow-back-circle" text=""></ion-back-button>
       </ion-buttons>
-      <ion-buttons slot="start" *ngIf="stepCount > 0" (click)="back()" class=btn-back>
-        <ion-icon name="arrow-back-circle" class="back"></ion-icon>
-      </ion-buttons>
     </ion-buttons>
     <ion-title class="ion-text-center">
       {{schoolDetails?.schoolName}}
-      <p>$545,698.34 had received</p>
+      <!-- <p>$545,698.34 had received</p> -->
     </ion-title>
     <ion-buttons slot="end">
       <ion-button>
@@ -28,7 +25,6 @@
       <ion-row>
         <ion-col class="ion-text-right">
           <a class="continue"> Direct contributions</a>
-
         </ion-col>
       </ion-row>
     </ion-grid>

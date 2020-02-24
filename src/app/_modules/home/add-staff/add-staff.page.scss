@@ -72,7 +72,13 @@ ion-list.charly-points {
     }
 }
 
-
+ion-button.continue {
+    --background: transparent;
+    --border: 0px;
+    --box-shadow: none;
+    color: var(--ion-color-primary);
+    cursor: pointer;
+}
 input[accept*="image"] {
     opacity: 0;
     top: 0;

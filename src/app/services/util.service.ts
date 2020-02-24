@@ -48,7 +48,7 @@ export class UtilService {
       message: message,
       duration: 4000,
       color: 'danger',
-      position: 'bottom',
+      position: 'top',
       mode: 'md',
     });
     toast.present();
@@ -65,7 +65,7 @@ export class UtilService {
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 2000,
-      position: 'bottom',
+      position: 'top',
       mode: 'md',
       color: 'success'
     });

@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title class="ion-text-center">
       Schools Participating
-      <p>55 Schools in Tulsa</p>
+      <!-- <p>55 Schools in Tulsa</p> -->
     </ion-title>
     <ion-buttons slot="end">
       <ion-button>
@@ -23,8 +23,8 @@
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
     <ion-grid>
       <ion-row>
-        <ion-col class="ion-text-left">
-          <ion-searchbar cancelButtonIcon showCancelButton="focus" cancelButtonText="cancel"></ion-searchbar>
+        <ion-col class="ion-text-left" *ngIf="participatingSchool?.length > 0">
+          <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"></ion-searchbar>
         </ion-col>
         <ion-col class="ion-text-right">
           <a [routerLink]="['/add-school']" class="add-school"> Add a School</a>
@@ -35,13 +35,13 @@
     <ion-grid>
       <ion-row>
         <ion-col size="3">
-          {{participatingSchool?.schoolPublic}} Public
+          {{dataCount?.schoolPublic}} Public
         </ion-col>
         <ion-col size="3">
-          {{participatingSchool?.schoolPrivate}} Private
+          {{dataCount?.schoolPrivate}} Private
         </ion-col>
         <ion-col size="3">
-          {{participatingSchool?.schoolMagnet}} Magnet
+          {{dataCount?.schoolMagnet}} Magnet
         </ion-col>
         <ion-col size="3" class="location ion-text-right">
           <ion-icon name="location"></ion-icon><br>
@@ -50,20 +50,20 @@
       </ion-row>
     </ion-grid>
 
-    <ion-list *ngFor="let item of participatingSchool.data">
-      <ion-item [routerLink]="['/school/',item._id]">
+    <ion-list *ngFor="let item of participatingSchool">
+      <ion-item [routerLink]="['/school/',item._id]" lines="none">
         <ion-avatar slot="start">
-          <img [src]="(item?.photo && item?.photo != null) ? item.photo : 'assets/images/school.jpg'" alt="school"
-            class="school">
+          <img [src]="(item?.photo) ? apiUrl + item.photo : 'assets/images/school.jpg'" alt="school" class="school">
         </ion-avatar>
         <ion-label>{{item?.schoolName}}
           <p>{{item?.schoolType}}</p>
         </ion-label>
-        <p>{{item?.points}}</p>
+        <!-- <p>{{item?.points}}</p> -->
       </ion-item>
-      <ion-item>
+      <hr>
+      <ion-item lines="none">
         <ion-avatar slot="start">
-          <img [src]="(item?.adminphoto) ? item.adminphoto : 'assets/images/user.jpg'" alt="admin" class="admin">
+          <img [src]="(item?.adminphoto) ? item.adminphoto : 'assets/images/user.png'" alt="admin" class="admin">
         </ion-avatar>
         <ion-label>{{item?.fullName}}
         </ion-label>
@@ -71,4 +71,8 @@
       </ion-item>
     </ion-list>
   </div>
+  <ion-infinite-scroll (ionInfinite)="loadMoreFeeds($event)">
+    <ion-infinite-scroll-content loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

@@ -38,6 +38,8 @@ export class AddSchoolPage {
 
   submitted = false;
 
+  imageData;
+
   public schoolTypes = [
     { id: 1, name: 'Public' },
     { id: 2, name: 'Private' },
@@ -81,14 +83,14 @@ export class AddSchoolPage {
     });
 
     this.schoolExposureForm = this.formBuilder.group({
-      photo: new FormControl('', Validators.required),
+      // photo: new FormControl('', Validators.required),
       schoolDescription: new FormControl('', Validators.required),
       schoolAchievement: new FormControl('', Validators.required),
     });
   }
-  async ionViewDidEnter() {
 
-  }
+  async ionViewDidEnter() { }
+
   async nextStep() {
     console.log(this.stepCount)
     if (this.stepCount < 2) {
@@ -108,8 +110,8 @@ export class AddSchoolPage {
       //     async (data: any) => {
       //       console.log(data)
       //       if (data.success == true) {
+      //         this.utiService.presentToast(data.message);
       //         const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
-
       //         const modalOption: any = {
       //           component: OtpVerificationComponent,
       //           backdropDismiss: false,
@@ -127,6 +129,9 @@ export class AddSchoolPage {
       //           }
       //         });
       //         return await modal.present();
+      //       }
+      //       else {
+      //         this.utiService.error(data.message);
       //       }
       //     },
       //     error => {
@@ -180,6 +185,7 @@ export class AddSchoolPage {
       }
     }
   }
+
   /*-------Read image url import from libraby----*/
   readUrl(event) {
     if (event.target.files && event.target.files[0]) {
@@ -189,33 +195,62 @@ export class AddSchoolPage {
         this.image = reader.result;
       }
       let formData = new FormData();
-      let params = { name: event.target.files[0].url, type: event.target.files[0].type, filename: name, private: false }
+      let params = { value: event.target.files[0], filename: name }
       this.schoolExposureForm.value.photo = params;
-      // formData.append('image_url', event.target.files[0], name);
+
+      // this.uploadImageData(formData);
+      this.imageData = event.target.files[0];
       reader.readAsDataURL(event.target.files[0]);
     }
-
   }
 
-  async onSubmit() {
+  //**---------Upload photo on server---------------*/
+  async uploadImageData(formData) {
+    console.log(formData)
+    this.utiService.showLoading();
+    await this.authenticationService.uploadPhoto(formData)
+      .subscribe((data: any) => {
+        if (data) {
+          console.log(data)
+          this.utiService.presentToast(data.message);
+        }
+      },
+        error => {
+          this.utiService.error(error);
+        });
+  }
+
+
+  async onSubmit(authyId) {
     let loading = await this.loadingCtrl.create({
       message: "Creating school please wait..."
     });
     loading.present();
-    let id = {
-      authyId: 96789799
-    }
-    const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value, ...id };
-    console.log(params);
-    await this.schoolService.addSchool(params)
-      .subscribe(
-        async (data: any) => {
-          if (data.success == true) {
-            this.utiService.presentToast(data.success);
-            loading.dismiss();
-            this.router.navigate(['school']);
-          }
-        },
+    let formData = new FormData();
+    formData.append('photo', this.imageData);
+    console.log(formData);
+    formData.append('schoolName', this.aboutSchoolForm.value.schoolName);
+    formData.append('schoolType', this.aboutSchoolForm.value.schoolType);
+    formData.append('schoolLocation', this.aboutSchoolForm.value.schoolLocation);
+    formData.append('aboutSchoolFunds', this.schoolFundForm.value.aboutSchoolFunds);
+    formData.append('staffPoints', this.schoolFundForm.value.staffPoints);
+    formData.append('fullName', this.aboutOwnerForm.value.fullName);
+    formData.append('mobileNumber', this.aboutOwnerForm.value.mobileNumber);
+    formData.append('schoolDescription', this.schoolExposureForm.value.schoolDescription);
+    formData.append('schoolAchievement', this.schoolExposureForm.value.schoolAchievement);
+    formData.append('authyId', authyId);
+
+    // const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value, ...id };
+    // console.log(params);
+    await this.schoolService.addSchool(formData)
+      .subscribe((data: any) => {
+        console.log(data)
+        if (data.success == true) {
+          this.utiService.presentToast(data.success);
+          this.router.navigate(['school', data.data._id]);
+          loading.dismiss();
+        }
+      },
         error => {
           loading.dismiss();
           if (error.error == undefined) {
@@ -232,10 +267,10 @@ export class AddSchoolPage {
       { type: 'required', message: 'School type is required.' },
     ],
     'schoolLocation': [
-      { type: 'required', message: 'School location is required.' },
+      { type: 'required', message: 'Zip Code is required.' },
     ],
     'aboutSchoolFunds': [
-      { type: 'required', message: 'School funds is required.' },
+      { type: 'required', message: 'School funds field is required.' },
     ],
     'fullName': [
       { type: 'required', message: 'Full name is required.' },
@@ -247,10 +282,10 @@ export class AddSchoolPage {
       { type: 'maxLength', message: 'Phone number  Max 10 digit.' }
     ],
     'schoolDescription': [
-      { type: 'required', message: 'School Description is required.' },
+      { type: 'required', message: 'School Description field is required.' },
     ],
     'schoolAchievement': [
-      { type: 'required', message: 'School Achievement is required.' },
+      { type: 'required', message: 'School Achievement field is required.' },
     ],
   }
 }

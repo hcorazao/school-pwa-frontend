@@ -7,6 +7,7 @@ import { UtilService } from 'src/app/services/util.service';
 import { Motion } from '@capacitor/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SchoolService } from 'src/app/services/school.service';
+import { environment } from 'src/environments/environment';
 const { Clipboard } = Plugins;
 
 declare var google: any;
@@ -18,14 +19,17 @@ declare var google: any;
 export class SchoolParticipatingPage {
   orientationType;
 
-  loc:string = 'Tulsa';
+  loc: string = 'Tulsa';
+
+  searchText;
 
   participatingSchool: Array<any> = [];
 
-  // public participatingSchoolItems = [
-  //   { schoolName: 'School name', adminName: 'Admin', schoolIcon: 'assets/images/school.jpg', adminIcon: 'assets/images/user.png', description: 'Private or Public', points: '545 *Points received' },
-  //   { schoolName: 'School name', adminName: 'Admin', schoolIcon: 'assets/images/school.jpg', adminIcon: 'assets/images/user.png', description: 'Private or Public', points: '545 *Points received' },
-  // ]
+  apiUrl = environment.url;
+
+  page: number = 0;
+
+  dataCount;
 
   constructor(
     private router: Router,
@@ -40,7 +44,7 @@ export class SchoolParticipatingPage {
       let type: any = event;
       this.orientationType = type.srcElement.screen.orientation.type;
     })
-   
+
   }
 
   ngOnInit() {
@@ -69,12 +73,13 @@ export class SchoolParticipatingPage {
   }
 
   async getSchoolsList() {
-    await this.schoolService.getSchoolList()
-      .subscribe(
+    await this.schoolService.getSchoolList(this.page)
+      .pipe().subscribe(
         async (data: any) => {
           console.log(data)
           if (data.success == true) {
-            this.participatingSchool = data;
+            this.dataCount = data.dataCount;
+            this.participatingSchool = data.data;
           }
         },
         error => {
@@ -83,6 +88,29 @@ export class SchoolParticipatingPage {
           } else { this.utilService.error(error.error); }
         });
   }
-
+  /**
+ * @public
+ * @method loadMoreData
+ * @return {none}
+ */
+  loadMoreFeeds(event) {
+    setTimeout(() => {
+      event.target.complete();
+      this.page += 1;
+      this.schoolService.getSchoolList(this.page).subscribe(data => {
+        console.log(data)
+        if (data.success == false) {
+          event.target.disabled = true;
+        }
+        else {
+          // App logic to determine if all data is loaded and disable the infinite scroll
+          for (let item of data.data) {
+            this.participatingSchool.push(item);
+          }
+        }
+      },
+        error => { this.utilService.error(error); })
+    }, 500);
+  }
 
 }

@@ -57,6 +57,7 @@ export class AddStaffPage {
         async data => {
           if (data.success == true) {
             this.utilService.presentToast(data.message);
+            this.router.navigate(['qr-reader']);
           }
           console.log(data)
           loading.dismiss();

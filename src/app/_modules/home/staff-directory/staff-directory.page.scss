@@ -22,7 +22,9 @@ ion-col.location {
 
 ion-list {
     margin: 6px 0px !important;
-
+    border: 1px solid var(--ion-color-medium-tint);
+    cursor: pointer;
+    border-radius: 5px;
     img {
         object-fit: cover;
     }
@@ -35,5 +37,11 @@ ion-list {
     ion-label {
         color: var(--ion-text-heading-color);
         line-height:2;
+    }
+    ion-button.invited {
+        position: absolute;
+        right: 23%;
+        font-size: 11px;
+        text-transform: capitalize;
     }
 }

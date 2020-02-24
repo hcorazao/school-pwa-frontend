@@ -23,9 +23,13 @@ export class AuthenticationService {
   sendOTP(data) {
     return this.http.post(`${this.url}/school/otp-send`, data)
   }
-  
+
   verifyOTP(data) {
     return this.http.get(`${this.url}/school/otp-verify/?id=${data.otp}&token=${data.authyId}`)
+  }
+
+  uploadPhoto(data) {
+    return this.http.post(`${this.url}/school/image-upload/`, data);
   }
 
 }
