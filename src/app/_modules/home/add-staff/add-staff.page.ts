@@ -18,7 +18,9 @@ export class AddStaffPage {
   public staffForm: FormGroup;
 
   submitted = false;
+
   orientationType;
+ 
   constructor(
     private schoolService: SchoolService,
     private router: Router,
@@ -27,12 +29,12 @@ export class AddStaffPage {
     private formBuilder: FormBuilder,
     public loadingCtrl: LoadingController
   ) {
+
     this.orientationType = this.screenOrientation.type;
     Motion.addListener('orientation', (event: OrientationType) => {
       let type: any = event;
       this.orientationType = type.srcElement.screen.orientation.type;
     })
-
   }
 
   ngOnInit() {
@@ -41,11 +43,9 @@ export class AddStaffPage {
       mobileNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(14), Validators.pattern(/^[+-]?\d+$/)]),
       charlyPoints: new FormControl(true, Validators.required),
     });
-
   }
+
   async ionViewDidEnter() { }
-
-
 
   async onSubmit() {
     let loading = await this.loadingCtrl.create({
@@ -57,9 +57,9 @@ export class AddStaffPage {
         async data => {
           if (data.success == true) {
             this.utilService.presentToast(data.message);
-            this.router.navigate(['qr-reader']);
+            // this.router.navigate(['qr-reader']);
+            this.router.navigate(['staff-directory']);
           }
-          console.log(data)
           loading.dismiss();
         },
         error => {

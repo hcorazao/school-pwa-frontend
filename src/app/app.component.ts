@@ -23,5 +23,9 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('/ngsw-worker.js')
+    //   console.log('Registered as service worker');
+    // }
   }
 }

@@ -7,13 +7,11 @@
     </ion-buttons>
     <ion-title class="ion-text-center">
       Schools Participating
-      <!-- <p>55 Schools in Tulsa</p> -->
     </ion-title>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon name="ellipsis-horizontal-circle-outline" class="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
-
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -23,7 +21,7 @@
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
     <ion-grid>
       <ion-row>
-        <ion-col class="ion-text-left" *ngIf="participatingSchool?.length > 0">
+        <ion-col class="ion-text-left">
           <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"></ion-searchbar>
         </ion-col>
         <ion-col class="ion-text-right">
@@ -32,44 +30,53 @@
       </ion-row>
     </ion-grid>
     <h5 class="ion-text-left">SCHOOLS</h5>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="3">
-          {{dataCount?.schoolPublic}} Public
-        </ion-col>
-        <ion-col size="3">
-          {{dataCount?.schoolPrivate}} Private
-        </ion-col>
-        <ion-col size="3">
-          {{dataCount?.schoolMagnet}} Magnet
-        </ion-col>
-        <ion-col size="3" class="location ion-text-right">
-          <ion-icon name="location"></ion-icon><br>
-          Tulsa
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <ion-list *ngFor="let item of participatingSchool">
-      <ion-item [routerLink]="['/school/',item._id]" lines="none">
-        <ion-avatar slot="start">
-          <img [src]="(item?.photo) ? apiUrl + item.photo : 'assets/images/school.jpg'" alt="school" class="school">
-        </ion-avatar>
-        <ion-label>{{item?.schoolName}}
-          <p>{{item?.schoolType}}</p>
-        </ion-label>
-        <!-- <p>{{item?.points}}</p> -->
-      </ion-item>
-      <hr>
-      <ion-item lines="none">
-        <ion-avatar slot="start">
-          <img [src]="(item?.adminphoto) ? item.adminphoto : 'assets/images/user.png'" alt="admin" class="admin">
-        </ion-avatar>
-        <ion-label>{{item?.fullName}}
-        </ion-label>
-        <ion-icon name="navigate-outline"></ion-icon>
-      </ion-item>
-    </ion-list>
+    <ng-container *ngIf="skeleton">
+      <app-skeleton *ngIf="skeleton"></app-skeleton>
+    </ng-container>
+    <ng-container *ngIf="!skeleton && participatingSchool.length > 0">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="3">
+            {{dataCount?.schoolPublic}} Public
+          </ion-col>
+          <ion-col size="3">
+            {{dataCount?.schoolPrivate}} Private
+          </ion-col>
+          <ion-col size="3">
+            {{dataCount?.schoolMagnet}} Magnet
+          </ion-col>
+          <ion-col size="3" class="location ion-text-right">
+            <ion-icon name="location"></ion-icon><br>
+            Tulsa
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+        <ion-list *ngFor="let item of participatingSchool | SearchFilter: {schoolName: searchText}">
+          <ion-item [routerLink]="['/school/',item._id]" lines="none">
+            <ion-avatar slot="start">
+              <img [src]="(item?.photo) ? apiUrl + item.photo : 'assets/images/school.jpg'" alt="school" class="school">
+            </ion-avatar>
+            <ion-label>{{item?.schoolName}}
+              <p>{{item?.schoolType}}</p>
+            </ion-label>
+            <!-- <p>{{item?.points}}</p> -->
+          </ion-item>
+          <hr>
+          <ion-item lines="none">
+            <ion-avatar slot="start">
+              <img [src]="(item?.adminphoto) ? item.adminphoto : 'assets/images/user.png'" alt="admin" class="admin">
+            </ion-avatar>
+            <ion-label>{{item?.fullName}}
+            </ion-label>
+            <ion-icon name="navigate-outline" class="location"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+      <ng-container *ngIf="!skeleton && participatingSchool.length == 0">
+        <div class="no-data">
+          No Data Found
+        </div>
+    </ng-container>
   </div>
   <ion-infinite-scroll (ionInfinite)="loadMoreFeeds($event)">
     <ion-infinite-scroll-content loadingText="Loading more data...">

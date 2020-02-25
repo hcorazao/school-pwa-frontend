@@ -15,7 +15,6 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {
     Device.getInfo().then((res) => {
-      console.log(res)
       let info = res;
     });
   }
@@ -25,7 +24,7 @@ export class AuthenticationService {
   }
 
   verifyOTP(data) {
-    return this.http.get(`${this.url}/school/otp-verify/?id=${data.otp}&token=${data.authyId}`)
+    return this.http.get(`${this.url}/school/otp-verify/?id=${data.authyId}&token=${data.otp}`)
   }
 
   uploadPhoto(data) {

@@ -20,7 +20,7 @@ export class UtilService {
   constructor(
     public toastCtrl: ToastController,
     public loadingController: LoadingController,
-    public alertCtrl:AlertController
+    public alertCtrl: AlertController
 
   ) {
   }
@@ -55,7 +55,8 @@ export class UtilService {
   }
   async showLoading() {
     this._loading = await this.loadingController.create({
-      message: 'Loading....',
+      // message: 'Loading....',
+      spinner: 'circular',
       duration: 3000
     });
     await this._loading.present();

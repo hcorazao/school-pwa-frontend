@@ -29,12 +29,11 @@ export class CharlyFundPage {
       let type: any = event;
       this.orientationType = type.srcElement.screen.orientation.type;
     })
-
   }
 
   ngOnInit() {
-
   }
+
   async ionViewDidEnter() { }
   routePage(route) {
     if (route) {

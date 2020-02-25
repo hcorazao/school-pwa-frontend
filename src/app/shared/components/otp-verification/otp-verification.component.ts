@@ -17,6 +17,7 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
   verified: boolean = false;
 
   formData;
+
   authyId;
 
   constructor(
@@ -32,7 +33,7 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
 
     let params = navParams.data;
     if (params.modal.ComponentProps != undefined) {
-      this.formData = params.modal.ComponentProps.formData;
+      this.formData = params.modal.ComponentProps.data;
       this.authyId = params.modal.ComponentProps.authyId;
     }
   }
@@ -49,21 +50,21 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
   }
 
   async onSumbit() {
+
     let loading = await this.loadingCtrl.create({
       message: "Creating account please wait..."
     });
     loading.present();
     let params = {
-      otp: this.otpForm.value,
+      otp: this.otpForm.value.otp,
       authyId: this.authyId
     }
     await this.authenticationService.verifyOTP(params)
       .subscribe(
         async data => {
-          console.log(data)
           loading.dismiss();
           this.verified = true;
-          this.router.navigate(['school']);
+          // this.router.navigate(['school']);
         },
         error => {
           loading.dismiss();

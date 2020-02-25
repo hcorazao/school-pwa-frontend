@@ -16,21 +16,20 @@ export class SchoolService {
 
   constructor(private http: HttpClient) {
     Device.getInfo().then((res) => {
-      console.log(res)
       let info = res;
     });
   }
 
   addSchool(data) {
-    return this.http.post<any>(`${this.url}/school/add`, data);
+    return this.http.post<any>(`${this.url}/school`, data);
   }
 
   getSchoolList(page) {
-    return this.http.get<any>(`${this.url}/school/data/?page=` + page);
+    return this.http.get<any>(`${this.url}/school/?page=` + page);
   }
 
   addStaff(data) {
-    return this.http.post<any>(`${this.url}/staff/add`, data);
+    return this.http.post<any>(`${this.url}/staff`, data);
   }
 
   getSchoolbyId(id) {
@@ -38,7 +37,7 @@ export class SchoolService {
   }
 
   getStaff(page) {
-    return this.http.get<any>(`${this.url}/staff/data/?page=` + page);
+    return this.http.get<any>(`${this.url}/staff/?page=` + page);
   }
 
 }

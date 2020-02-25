@@ -7,13 +7,11 @@
     </ion-buttons>
     <ion-title class="ion-text-center">
       Staff
-      <!-- <p>55 Schools in Tulsa</p> -->
     </ion-title>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon name="ellipsis-horizontal-circle-outline" class="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
-
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -21,7 +19,7 @@
 <ion-content class="ion-padding">
   <div class="section"
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
-    <ion-grid>
+    <ion-grid *ngIf="staffDirectories.length > 0">
       <ion-row>
         <ion-col class="ion-text-left">
           <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"></ion-searchbar>
@@ -39,19 +37,28 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
-    <ion-list *ngFor="let item of staffDirectories">
-      <ion-item lines="none">
-        <ion-avatar slot="start">
-          <img src="assets/images/user.png" alt="school" class="school">
-        </ion-avatar>
-        <ion-label>{{item.staffName}}
-          <!-- <p>{{item.points}}</p> -->
-          <ion-button class="invited">Invited</ion-button>
-        </ion-label>
-        <ion-icon name="navigate-outline"></ion-icon>
-      </ion-item>
-    </ion-list>
+    <ng-container *ngIf="skeleton">
+      <app-skeleton *ngIf="skeleton"></app-skeleton>
+    </ng-container>
+    <ng-container *ngIf="!skeleton && staffDirectories.length > 0">
+      <ion-list *ngFor="let item of staffDirectories | SearchFilter: {staffName: searchText}">
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <img src="assets/images/user.png" alt="school" class="school">
+          </ion-avatar>
+          <ion-label>{{item.staffName}}
+            <!-- <p>{{item.points}}</p> -->
+            <!-- <ion-button class="invited">Invited</ion-button> -->
+          </ion-label>
+          <ion-icon name="navigate-outline" class="location"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+    <ng-container *ngIf="!skeleton && staffDirectories.length == 0">
+      <div class="no-data">
+        No Data Found
+      </div>
+    </ng-container>
   </div>
   <ion-infinite-scroll (ionInfinite)="loadMoreFeeds($event)">
     <ion-infinite-scroll-content loadingText="Loading more data...">

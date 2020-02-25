@@ -13,50 +13,54 @@
       <ion-button>
         <ion-icon name="ellipsis-horizontal-circle-outline" class="ellipsis-horizontal-circle-outline"></ion-icon>
       </ion-button>
-
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="form"
-    [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
-    <ion-grid>
-      <ion-row>
-        <ion-col class="ion-text-right">
-          <a class="continue"> Direct contributions</a>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <div class="school-img">
-      <ion-img src="assets/images/school-img.jpg"></ion-img>
-    </div>
-    <div class="school-info ion-padding">
-      {{schoolDetails?.schoolDescription }}
-    </div>
-    <div class="school-achievment-section ion-padding">
-      <h5>Our plan of achivements</h5>
-      <p>  {{schoolDetails?.schoolAchievement }}</p>
+  <ng-container *ngIf="_loading">
+    <ion-spinner name="circular"></ion-spinner>
+  </ng-container>
+  <ng-container *ngIf="!_loading">
+    <div class="form"
+      [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
+      <ion-grid>
+        <ion-row>
+          <ion-col class="ion-text-right">
+            <a class="continue"> Direct contributions</a>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <div class="school-img">
+        <ion-img src="assets/images/school-img.jpg" alt="school-logo"></ion-img>
+      </div>
+      <div class="school-info ion-padding">
+        {{schoolDetails?.schoolDescription }}
+      </div>
+      <div class="school-achievment-section ion-padding">
+        <h5>Our plan of achivements</h5>
+        <p class="ion-text-justify"> {{schoolDetails?.schoolAchievement }}</p>
 
-      <a class="add-achivment ion-text-left" >
-        <ion-icon name="add" slot="start"></ion-icon><span slot="end">Achievements</span>
-      </a>
-<br>
+        <a class="add-achivment ion-text-left">
+          <ion-icon name="add" slot="start"></ion-icon><span slot="end">Achievements</span>
+        </a>
+        <br>
+      </div>
+      <div class="directory ion-padding">
+        <h5 class="ion-text-left">DIRECTORY</h5>
+        <ion-row>
+          <ion-col [routerLink]="['/add-staff']">
+            <ion-icon name="add" class="staff"></ion-icon><br>
+            <span>Staff</span>
+          </ion-col>
+          <ion-col>
+            <ion-icon name="add" class="clubs"></ion-icon><br>
+            <span>Clubs</span>
+          </ion-col>
+          <ion-col>
+          </ion-col>
+        </ion-row>
+      </div>
     </div>
-    <div class="directory ion-padding">
-      <h5 class="ion-text-left">DIRECTORY</h5>
-      <ion-row>
-        <ion-col [routerLink]="['/add-staff']">
-          <ion-icon name="add" class="staff"></ion-icon><br>
-          <span>Staff</span>
-        </ion-col>
-        <ion-col>
-          <ion-icon name="add" class="clubs"></ion-icon><br>
-          <span>Clubs</span>
-        </ion-col>
-        <ion-col>
-        </ion-col>
-      </ion-row>
-    </div>
-  </div>
+  </ng-container>
 </ion-content>

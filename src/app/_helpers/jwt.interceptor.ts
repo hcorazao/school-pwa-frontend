@@ -10,7 +10,6 @@ export class JwtInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // // add authorization header with jwt token if available
-      
         return next.handle(request);
     }
 }

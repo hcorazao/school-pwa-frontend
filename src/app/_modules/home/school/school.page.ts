@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Motion } from '@capacitor/core';
 import { SchoolService } from 'src/app/services/school.service';
@@ -20,8 +19,9 @@ export class SchoolPage {
 
   schoolDetails;
 
+  _loading: boolean = true;
+
   constructor(
-    private router: Router,
     public utilService: UtilService,
     private schoolService: SchoolService,
     public screenOrientation: ScreenOrientation,
@@ -34,14 +34,11 @@ export class SchoolPage {
     })
 
     this.activatedRoute.params.subscribe(params => {
-      console.log(params)
       this._id = params.id;
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   async ionViewDidEnter() {
     this.getSchoolById();
@@ -51,13 +48,13 @@ export class SchoolPage {
     await this.schoolService.getSchoolbyId(this._id)
       .subscribe(
         async data => {
-          console.log(data)
           this.schoolDetails = data.data;
+          this._loading = false;
         },
         error => {
           if (error.error == undefined) {
-            this.utilService.error(error);
-          } else { this.utilService.error(error.error); }
+            this._loading = false;
+          }
         });
   }
 }

@@ -49,34 +49,67 @@ ion-title {
 h5 {
     color: var(--ion-text-heading-color);
 }
+
 ion-back-button {
-    color:var(--ion-back-btn-color);
+    color: var(--ion-back-btn-color);
+    left: 10px;
+    position: absolute;
 }
+
 .section.landscape {
     width: 60%;
     text-align: center;
     margin: auto;
 }
+
 ion-label {
     text-transform: capitalize;
 }
+
 .form.landscape {
     width: 50%;
     text-align: center;
     margin: auto;
 }
+
 a.continue {
     cursor: pointer;
 }
+
 .validation-errors {
     text-align: left;
     color: var(--ion-color-danger);
     font-size: 14px;
     padding-top: 4px;
 }
-.searchbar-input.sc-ion-searchbar-md {
-    border-radius: 12px;
+
+.searchbar-input {
+    border-radius: 12px !important;
+    --background: #fff;
+    box-shadow: none !important;
 }
+
 ion-spinner {
+    color: var(--ion-color-primary);
+}
+
+.no-data {
+    padding: 20px;
+    background: var(--ion-color-dark-contrast);
+    width: 50%;
+    text-align: center;
+    margin: auto;
+}
+
+ion-spinner {
+    color: var(--ion-color-primary) !important;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    top: 10%;
+}
+
+ion-icon.location {
     color: var(--ion-color-primary);
 }

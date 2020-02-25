@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { SchoolParticipatingPage } from './school-participating.page';
 import { SearchFilterModule } from 'src/app/shared/pipes/search-pipe.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { SearchFilterModule } from 'src/app/shared/pipes/search-pipe.module';
     FormsModule,
     IonicModule,
     SearchFilterModule,
+    SharedModule,
     RouterModule.forChild([
       {
         path: '',

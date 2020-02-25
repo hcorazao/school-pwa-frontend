@@ -83,7 +83,6 @@ export class AddSchoolPage {
     });
 
     this.schoolExposureForm = this.formBuilder.group({
-      // photo: new FormControl('', Validators.required),
       schoolDescription: new FormControl('', Validators.required),
       schoolAchievement: new FormControl('', Validators.required),
     });
@@ -92,54 +91,48 @@ export class AddSchoolPage {
   async ionViewDidEnter() { }
 
   async nextStep() {
-    console.log(this.stepCount)
     if (this.stepCount < 2) {
       this.stepCount = this.stepCount + 1;
       this.onStpes();
     }
     else {
-      this.stepCount = this.stepCount + 1;
-      this.onStpes();
-      // let params = {
-      //   mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
-      //   email: "schoolPWA@gmail.com",
-      //   countryCode: 91
-      // }
-      // await this.authenticationService.sendOTP(params)
-      //   .subscribe(
-      //     async (data: any) => {
-      //       console.log(data)
-      //       if (data.success == true) {
-      //         this.utiService.presentToast(data.message);
-      //         const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
-      //         const modalOption: any = {
-      //           component: OtpVerificationComponent,
-      //           backdropDismiss: false,
-      //           componentProps: {
-      //             from: formData,
-      //             authyId: data.authyId
-      //           },
-      //         };
-      //         const modal = await this.modalCtrl.create(modalOption);
-      //         modal.onDidDismiss().then(async (res) => {
-      //           if (res.data == 'verified') {
-      //             this.stepCount = this.stepCount + 1;
-      //             this.onStpes();
-      //             await this.onSubmit(data.authyId);
-      //           }
-      //         });
-      //         return await modal.present();
-      //       }
-      //       else {
-      //         this.utiService.error(data.message);
-      //       }
-      //     },
-      //     error => {
-      //       console.log(error)
-      //       if (error.error == undefined) {
-      //         this.utiService.error(error);
-      //       } else { this.utiService.error(error.error); }
-      //     });
+      let params = {
+        mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
+        email: "schoolPWA@gmail.com",
+        countryCode: 91
+      }
+      await this.authenticationService.sendOTP(params)
+        .subscribe(
+          async (data: any) => {
+            if (data.success == true) {
+              this.utiService.presentToast(data.message);
+              const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+              const modalOption: any = {
+                component: OtpVerificationComponent,
+                backdropDismiss: false,
+                componentProps: {
+                  data: formData,
+                  authyId: data.authyId
+                },
+              };
+              const modal = await this.modalCtrl.create(modalOption);
+              modal.onDidDismiss().then(async (res) => {
+                if (res.data == 'verified') {
+                  this.stepCount = this.stepCount + 1;
+                  this.onStpes();
+                }
+              });
+              return await modal.present();
+            }
+            else {
+              this.utiService.error(data.message);
+            }
+          },
+          error => {
+            if (error.error == undefined) {
+              this.utiService.error(error);
+            } else { this.utiService.error(error.error); }
+          });
     }
 
   }
@@ -194,32 +187,13 @@ export class AddSchoolPage {
       reader.onload = (_event) => {
         this.image = reader.result;
       }
-      let formData = new FormData();
       let params = { value: event.target.files[0], filename: name }
       this.schoolExposureForm.value.photo = params;
 
-      // this.uploadImageData(formData);
       this.imageData = event.target.files[0];
       reader.readAsDataURL(event.target.files[0]);
     }
   }
-
-  //**---------Upload photo on server---------------*/
-  async uploadImageData(formData) {
-    console.log(formData)
-    this.utiService.showLoading();
-    await this.authenticationService.uploadPhoto(formData)
-      .subscribe((data: any) => {
-        if (data) {
-          console.log(data)
-          this.utiService.presentToast(data.message);
-        }
-      },
-        error => {
-          this.utiService.error(error);
-        });
-  }
-
 
   async onSubmit(authyId) {
     let loading = await this.loadingCtrl.create({
@@ -228,7 +202,6 @@ export class AddSchoolPage {
     loading.present();
     let formData = new FormData();
     formData.append('photo', this.imageData);
-    console.log(formData);
     formData.append('schoolName', this.aboutSchoolForm.value.schoolName);
     formData.append('schoolType', this.aboutSchoolForm.value.schoolType);
     formData.append('schoolLocation', this.aboutSchoolForm.value.schoolLocation);
@@ -241,12 +214,10 @@ export class AddSchoolPage {
     formData.append('authyId', authyId);
 
     // const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value, ...id };
-    // console.log(params);
     await this.schoolService.addSchool(formData)
       .subscribe((data: any) => {
-        console.log(data)
         if (data.success == true) {
-          this.utiService.presentToast(data.success);
+          this.utiService.presentToast(data.message);
           this.router.navigate(['school', data.data._id]);
           loading.dismiss();
         }

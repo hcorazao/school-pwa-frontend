@@ -28,6 +28,8 @@ export class StaffDirectoryPage {
 
   searchText;
 
+  skeleton: boolean = true;
+
   constructor(
     private screenOrientation: ScreenOrientation,
     public utilService: UtilService,
@@ -48,15 +50,15 @@ export class StaffDirectoryPage {
 
   async getStaffData() {
     await this.schoolService.getStaff(this.page).subscribe((res) => {
-      console.log(res)
       if (res.success == true) {
         this.staffDirectories = res.data;
       }
+      this.skeleton = false;
     },
       error => {
         if (error.error == undefined) {
-          this.utilService.error(error);
-        } else { this.utilService.error(error.error); }
+          this.skeleton = false;
+        }
       });
   }
   /**
@@ -65,12 +67,10 @@ export class StaffDirectoryPage {
 * @return {none}
 */
   loadMoreFeeds(event) {
-    console.log('ccc')
     setTimeout(() => {
       event.target.complete();
       this.page += 1;
       this.schoolService.getStaff(this.page).subscribe(data => {
-        console.log(data)
         if (data.success == false) {
           event.target.disabled = true;
         }
