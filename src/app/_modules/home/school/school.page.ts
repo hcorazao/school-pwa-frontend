@@ -4,6 +4,7 @@ import { UtilService } from 'src/app/services/util.service';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Motion } from '@capacitor/core';
 import { SchoolService } from 'src/app/services/school.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-school',
   templateUrl: 'school.page.html',
@@ -13,6 +14,8 @@ export class SchoolPage {
 
   image: any;
 
+  apiUrl = environment.url;
+  
   orientationType
 
   _id;

@@ -32,7 +32,8 @@
         </ion-row>
       </ion-grid>
       <div class="school-img">
-        <ion-img src="assets/images/school-img.jpg" alt="school-logo"></ion-img>
+        <ion-img [src]="(schoolDetails?.photo) ? apiUrl + schoolDetails.photo : 'assets/images/school.jpg'"
+          alt="school"></ion-img>
       </div>
       <div class="school-info ion-padding">
         {{schoolDetails?.schoolDescription }}
