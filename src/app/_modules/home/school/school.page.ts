@@ -15,7 +15,7 @@ export class SchoolPage {
   image: any;
 
   apiUrl = environment.url;
-  
+
   orientationType
 
   _id;
@@ -48,16 +48,11 @@ export class SchoolPage {
   }
 
   async getSchoolById() {
-    await this.schoolService.getSchoolbyId(this._id)
-      .subscribe(
-        async data => {
-          this.schoolDetails = data.data;
-          this._loading = false;
-        },
-        error => {
-          if (error.error == undefined) {
-            this._loading = false;
-          }
-        });
+    let res = await this.schoolService.getSchoolbyId(this._id).toPromise();
+    this.schoolDetails = res.data;
+    console.log(this.schoolDetails)
+    setTimeout(() => {
+      this._loading = false;
+    }, 500);
   }
 }

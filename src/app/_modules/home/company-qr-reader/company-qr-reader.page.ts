@@ -37,7 +37,7 @@ export class CompanyQrReaderPage {
   }
 
   async onSumbit() {
-    this.router.navigate(['school']);
+    this.router.navigate(['home/school']);
   }
 
 }

@@ -90,3 +90,7 @@ input[accept*="image"] {
 .no-photo {
     margin-top: 10px;
 }
+ion-badge {
+    background: transparent;
+    color: var(--ion-color-primary);
+}

@@ -19,7 +19,11 @@
 
 <ion-content>
   <ng-container *ngIf="_loading">
-    <ion-spinner name="circular"></ion-spinner>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-spinner name="circular"></ion-spinner>
+      </ion-col>
+    </ion-row>
   </ng-container>
   <ng-container *ngIf="!_loading">
     <div class="form"
@@ -31,7 +35,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <div class="school-img">
+      <div class="school-img" *ngIf="schoolDetails?.photo">
         <ion-img [src]="(schoolDetails?.photo) ? apiUrl + schoolDetails.photo : 'assets/images/school.jpg'"
           alt="school"></ion-img>
       </div>
@@ -50,7 +54,7 @@
       <div class="directory ion-padding">
         <h5 class="ion-text-left">DIRECTORY</h5>
         <ion-row>
-          <ion-col [routerLink]="['/add-staff']">
+          <ion-col [routerLink]="['/add-staff/', schoolDetails?._id]">
             <ion-icon name="add" class="staff"></ion-icon><br>
             <span>Staff</span>
           </ion-col>

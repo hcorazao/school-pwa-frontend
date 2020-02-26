@@ -21,10 +21,10 @@
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
     <ion-grid>
       <ion-row>
-        <ion-col class="ion-text-left">
+        <ion-col class="ion-text-left" size="7">
           <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"></ion-searchbar>
         </ion-col>
-        <ion-col class="ion-text-right">
+        <ion-col class="ion-text-right" size="5">
           <a [routerLink]="['/add-school']" class="add-school"> Add a School</a>
         </ion-col>
       </ion-row>
@@ -36,13 +36,13 @@
     <ng-container *ngIf="!skeleton && participatingSchool.length > 0">
       <ion-grid>
         <ion-row>
-          <ion-col size="3">
+          <ion-col size="3" class="ion-text-left">
             {{dataCount?.schoolPublic}} Public
           </ion-col>
           <ion-col size="3">
             {{dataCount?.schoolPrivate}} Private
           </ion-col>
-          <ion-col size="3">
+          <ion-col size="3" class="ion-text-right">
             {{dataCount?.schoolMagnet}} Magnet
           </ion-col>
           <ion-col size="3" class="location ion-text-right">
@@ -51,8 +51,8 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-        <ion-list *ngFor="let item of participatingSchool | SearchFilter: {schoolName: searchText}">
-          <ion-item [routerLink]="['/school/',item._id]" lines="none">
+        <ion-list *ngFor="let item of participatingSchool | SearchFilter: {schoolName: searchText}" [routerLink]="['/school/',item._id]">
+          <ion-item  lines="none">
             <ion-avatar slot="start">
               <img [src]="(item?.photo) ? apiUrl + item.photo : 'assets/images/school.jpg'" alt="school" class="school">
             </ion-avatar>

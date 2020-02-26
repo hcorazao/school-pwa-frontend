@@ -36,8 +36,8 @@ export class SchoolService {
     return this.http.get<any>(`${this.url}/school/` + id);
   }
 
-  getStaff(page) {
-    return this.http.get<any>(`${this.url}/staff/?page=` + page);
+  getStaff(data) {
+    return this.http.get<any>(`${this.url}/staff/?page=${data.page}&schoolId=${data.schoolId}`);
   }
 
 }

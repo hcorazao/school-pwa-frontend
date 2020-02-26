@@ -14,9 +14,11 @@ const { Clipboard } = Plugins;
   styleUrls: ['charly-fund.page.scss'],
 })
 export class CharlyFundPage {
+
   orientationType;
+
   public schoolItems = [
-    { name: 'Schools Participating', icon: 'chevron-forward-outline', route: 'school-participate', description: '' },
+    { name: 'Schools Participating', icon: 'chevron-forward-outline', route: '/participate', description: '' },
     { name: 'Contributions Statments', icon: 'chevron-forward-outline', route: '', description: 'Cooperation by Connecting & Sharing' },
   ]
   constructor(
@@ -31,8 +33,7 @@ export class CharlyFundPage {
     })
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   async ionViewDidEnter() { }
   routePage(route) {

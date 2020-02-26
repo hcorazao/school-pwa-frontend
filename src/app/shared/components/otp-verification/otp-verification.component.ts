@@ -32,10 +32,15 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
     public modalCtrl: ModalController) {
 
     let params = navParams.data;
-    if (params.modal.ComponentProps != undefined) {
-      this.formData = params.modal.ComponentProps.data;
-      this.authyId = params.modal.ComponentProps.authyId;
+    console.log(params.data)
+    if (params && params.data) {
+      this.formData = params.data;
     }
+    // if (params.modal.ComponentProps != undefined) {
+    //   this.formData = params.modal.ComponentProps.data;
+    //   console.log(this.formData)
+    //   this.authyId = params.modal.ComponentProps.authyId;
+    // }
   }
   ngOnInit() {
     this.otpForm = this.formBuilder.group({

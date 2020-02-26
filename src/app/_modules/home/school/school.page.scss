@@ -1,6 +1,5 @@
 ion-title {
     font-size: 15px;
-
     p {
         line-height: 0;
         color: var(--ion-text-color);
@@ -10,6 +9,13 @@ ion-title {
 
 .school-info {
     text-align: justify;
+}
+
+.school-img {
+    ion-img {
+        object-fit: cover;
+        height: 200px;
+    }
 }
 
 ion-icon.back {
@@ -25,10 +31,10 @@ ion-button.btn-back {
 
 .school-achievment-section {
     background: var(--ion-color-primary-contrast);
-
     a.add-achivment {
         float: left;
         cursor: pointer;
+
         ion-icon {
             font-size: 25px;
             vertical-align: middle;
@@ -43,7 +49,6 @@ ion-button.btn-back {
         border-radius: 100%;
         font-size: 25px;
     }
-
     span {
         padding: 6px;
         line-height: 2;

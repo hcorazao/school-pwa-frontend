@@ -3,7 +3,7 @@ import {
   Plugins,
 } from '@capacitor/core';
 import { Motion } from '@capacitor/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SchoolService } from 'src/app/services/school.service';
@@ -30,16 +30,22 @@ export class StaffDirectoryPage {
 
   skeleton: boolean = true;
 
+  schoolId;
+
   constructor(
     private screenOrientation: ScreenOrientation,
     public utilService: UtilService,
-    private schoolService: SchoolService
+    private schoolService: SchoolService,
+    public activatedRoute: ActivatedRoute
   ) {
     this.orientationType = this.screenOrientation.type;
     Motion.addListener('orientation', (event: OrientationType) => {
       let type: any = event;
       this.orientationType = type.srcElement.screen.orientation.type;
     })
+    this.activatedRoute.params.subscribe(params => {
+      this.schoolId = params.id;
+    });
   }
 
   ngOnInit() { }
@@ -48,40 +54,31 @@ export class StaffDirectoryPage {
     this.getStaffData();
   }
 
+  /**-----Get staff data @param schoolId-----*/
   async getStaffData() {
-    await this.schoolService.getStaff(this.page).subscribe((res) => {
-      if (res.success == true) {
-        this.staffDirectories = res.data;
-      }
-      this.skeleton = false;
-    },
-      error => {
-        if (error.error == undefined) {
-          this.skeleton = false;
-        }
-      });
+    let params = {
+      page: this.page,
+      schoolId: this.schoolId
+    }
+    let res = await this.schoolService.getStaff(params).toPromise();
+    this.staffDirectories = res.data;
+    this.skeleton = false;
   }
-  /**
-* @public
-* @method loadMoreData
-* @return {none}
-*/
+  /**-----loadMoreData on scroll-----*/
   loadMoreFeeds(event) {
-    setTimeout(() => {
+    setTimeout(async () => {
       event.target.complete();
       this.page += 1;
-      this.schoolService.getStaff(this.page).subscribe(data => {
-        if (data.success == false) {
-          event.target.disabled = true;
+      let res = await this.schoolService.getStaff(this.page).toPromise();
+      if (!res) {
+        event.target.disabled = true;
+      }
+      else {
+        // App logic to determine if all data is loaded and disable the infinite scroll
+        for (let item of res.data) {
+          this.staffDirectories.push(item);
         }
-        else {
-          // App logic to determine if all data is loaded and disable the infinite scroll
-          for (let item of data.data) {
-            this.staffDirectories.push(item);
-          }
-        }
-      },
-        error => { this.utilService.error(error); })
+      }
     }, 500);
   }
 }

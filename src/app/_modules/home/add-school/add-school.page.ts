@@ -69,7 +69,7 @@ export class AddSchoolPage {
     this.aboutSchoolForm = this.formBuilder.group({
       schoolName: new FormControl('', Validators.required),
       schoolType: new FormControl('', Validators.required),
-      schoolLocation: new FormControl('', Validators.required),
+      schoolLocation: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(7), Validators.pattern(/^[+-]?\d+$/)]),
     });
 
     this.schoolFundForm = this.formBuilder.group({
@@ -90,12 +90,13 @@ export class AddSchoolPage {
 
   async ionViewDidEnter() { }
 
-  async nextStep() {
+  async nextStep(ev) {
     if (this.stepCount < 2) {
       this.stepCount = this.stepCount + 1;
       this.onStpes();
     }
     else {
+      this.utilService.showLoading();
       let params = {
         mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
         email: "schoolPWA@gmail.com",
@@ -112,7 +113,8 @@ export class AddSchoolPage {
                 backdropDismiss: false,
                 componentProps: {
                   data: formData,
-                  authyId: data.authyId
+                  authyId: data.authyId,
+                  ev: ev
                 },
               };
               const modal = await this.modalCtrl.create(modalOption);
@@ -218,7 +220,7 @@ export class AddSchoolPage {
       .subscribe((data: any) => {
         if (data.success == true) {
           this.utiService.presentToast(data.message);
-          this.router.navigate(['school', data.data._id]);
+          this.router.navigate(['/school', data.data._id]);
           loading.dismiss();
         }
       },
@@ -239,6 +241,9 @@ export class AddSchoolPage {
     ],
     'schoolLocation': [
       { type: 'required', message: 'Zip Code is required.' },
+      { type: 'pattern', message: 'Invalid Input only numbers allowed for the Zip Code.' },
+      { type: 'minLength', message: 'Phone number  Min 5 digit.' },
+      { type: 'maxLength', message: 'Phone number  Max 7 digit.' }
     ],
     'aboutSchoolFunds': [
       { type: 'required', message: 'School funds field is required.' },

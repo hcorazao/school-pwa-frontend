@@ -47,65 +47,36 @@ export class SchoolParticipatingPage {
   }
 
   ngOnInit() {
-    // var lat = '';
-    // var lng = '';
-    // var address: any = 176215;
-    // let geocoder = new google.maps.Geocoder();
-    // geocoder.geocode({ 'address': 'address ' + address }, function (results, status) {
-    //   if (results[0].formatted_address) {
-    //     lat = results[0].geometry.location.lat();
-    //     lng = results[0].geometry.location.lng();
-    //     let addres = results[0].formatted_address;
-    //     this.loc = addres;
-    //   } else {
-    //     alert("Geocode was not successful for the following reason: " + status);
-    //   }
-    // });
   }
-
 
   async ionViewDidEnter() {
     this.page = 0;
     this.getSchoolsList();
   }
 
+  /**-------Data of participate schools------ */
   async getSchoolsList() {
-    await this.schoolService.getSchoolList(this.page)
-      .pipe().subscribe(
-        async (data: any) => {
-          if (data.success == true) {
-            this.dataCount = data.dataCount;
-            this.participatingSchool = data.data;
-          }
-          this.skeleton = false;
-        },
-        error => {
-          this.skeleton = false;
-          if (error.error == undefined) {
-          }
-        });
+    let data = await this.schoolService.getSchoolList(this.page).toPromise();
+    this.dataCount = data.dataCount;
+    this.participatingSchool = data.data;
+    this.skeleton = false;
   }
-  /**
- * @public
- * @method loadMoreData
- * @return {none}
- */
+
+  /**-------loadMoreData on scroll------ */
   loadMoreFeeds(event) {
-    setTimeout(() => {
+    setTimeout(async () => {
       event.target.complete();
       this.page += 1;
-      this.schoolService.getSchoolList(this.page).subscribe(data => {
-        if (data.success == false) {
-          event.target.disabled = true;
+      let data = await this.schoolService.getSchoolList(this.page).toPromise();
+      if (data.success == false) {
+        event.target.disabled = true;
+      }
+      else {
+        // App logic to determine if all data is loaded and disable the infinite scroll
+        for (let item of data.data) {
+          this.participatingSchool.push(item);
         }
-        else {
-          // App logic to determine if all data is loaded and disable the infinite scroll
-          for (let item of data.data) {
-            this.participatingSchool.push(item);
-          }
-        }
-      },
-        error => { this.utilService.error(error); })
+      }
     }, 500);
   }
 

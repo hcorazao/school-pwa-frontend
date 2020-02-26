@@ -8,8 +8,6 @@ ion-title {
     }
 }
 
-
-
 ion-col {
     margin: auto;
 }
@@ -26,12 +24,15 @@ ion-col.location {
     text-decoration: none;
 }
 
+ion-list:hover {
+    box-shadow:0 0 11px rgba(33,33,33,.2);
+}
+
 ion-list {
     margin: 6px 0px !important;
     border: 1px solid var(--ion-color-medium-tint);
     cursor: pointer;
-    border-radius: 5px;
-
+    // border-radius: 5px;
     img {
         object-fit: cover;
     }
@@ -39,12 +40,12 @@ ion-list {
     img.admin {
         height: 30px;
         width: 30px;
-
     }
 
     ion-label {
         color: var(--ion-text-heading-color);
         line-height: 2;
+        text-transform: capitalize;
     }
 
     hr {

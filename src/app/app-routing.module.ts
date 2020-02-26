@@ -1,20 +1,48 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './_helpers/auth.guard';
+import { HomePage } from './_modules/home/home.page';
+import { CharlyFundPage } from './_modules/home/charly-fund/charly-fund.page';
+import { SchoolParticipatingPage } from './_modules/home/school-participating/school-participating.page';
+import { AddSchoolPage } from './_modules/home/add-school/add-school.page';
+import { SchoolPage } from './_modules/home/school/school.page';
+import { AddStaffPage } from './_modules/home/add-staff/add-staff.page';
+import { CompanyQrReaderPage } from './_modules/home/company-qr-reader/company-qr-reader.page';
+import { StaffDirectoryPage } from './_modules/home/staff-directory/staff-directory.page';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: 'home',
-    loadChildren: () => import('./_modules/home/home.module').then(m => m.HomePageModule)
+    path: 'home', component: HomePage
   },
-  { path: 'charly-fund', loadChildren: () => import('./_modules/home/charly-fund/charly-fund.module').then(m => m.CharlyFundPageModule) },
-  { path: 'school-participate', loadChildren: () => import('./_modules/home/school-participating/school-participating.module').then(m => m.SchoolParticipatingPageModule) },
-  { path: 'add-school', loadChildren: () => import('./_modules/home/add-school/add-school.module').then(m => m.AddSchoolPageModule) },
-  { path: 'school/:id', loadChildren: () => import('./_modules/home/school/school.module').then(m => m.SchoolPageModule) },
-  { path: 'add-staff', loadChildren: () => import('./_modules/home/add-staff/add-staff.module').then(m => m.AddStaffPageModule) },
-  { path: 'qr-reader', loadChildren: () => import('./_modules/home/company-qr-reader/company-qr-reader.module').then(m => m.CompanyQrReaderPageModule) },
-  { path: 'staff-directory', loadChildren: () => import('./_modules/home/staff-directory/staff-directory.module').then(m => m.StaffDirectoryPageModule) },
+  {
+    path: 'charly', component: CharlyFundPage
+  },
+  {
+    path: 'participate',
+    component: SchoolParticipatingPage,
+  },
+  {
+    path: 'add-school',
+    component: AddSchoolPage
+  },
+  {
+    path: 'school/:id',
+    component: SchoolPage
+  },
+  {
+    path: 'add-staff/:id',
+    component: AddStaffPage
+  },
+  {
+    path: 'qr-reader',
+    component: CompanyQrReaderPage
+  },
+  {
+    path: 'staff-directory/:id',
+    component: StaffDirectoryPage
+  },
+
 ];
 
 @NgModule({

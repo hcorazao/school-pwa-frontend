@@ -11,9 +11,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AddSchoolPageModule } from './_modules/home/add-school/add-school.module';
 import { ErrorInterceptor } from './_helpers';
 import { SchoolService } from './services/school.service';
+import { HomePageModule } from './_modules/home/home.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +22,7 @@ import { SchoolService } from './services/school.service';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    AddSchoolPageModule,
+    HomePageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

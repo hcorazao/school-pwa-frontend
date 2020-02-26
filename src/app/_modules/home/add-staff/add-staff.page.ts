@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LoadingController } from '@ionic/angular';
@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Motion } from '@capacitor/core';
 import { SchoolService } from 'src/app/services/school.service';
+
 @Component({
   selector: 'app-add-staff',
   templateUrl: 'add-staff.page.html',
@@ -20,14 +21,17 @@ export class AddStaffPage {
   submitted = false;
 
   orientationType;
- 
+
+  schoolId;
+
   constructor(
     private schoolService: SchoolService,
     private router: Router,
     public screenOrientation: ScreenOrientation,
     public utilService: UtilService,
     private formBuilder: FormBuilder,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public activatedRoute: ActivatedRoute
   ) {
 
     this.orientationType = this.screenOrientation.type;
@@ -35,6 +39,9 @@ export class AddStaffPage {
       let type: any = event;
       this.orientationType = type.srcElement.screen.orientation.type;
     })
+    this.activatedRoute.params.subscribe(params => {
+      this.schoolId = params.id;
+    });
   }
 
   ngOnInit() {
@@ -42,7 +49,9 @@ export class AddStaffPage {
       staffName: new FormControl('', Validators.required),
       mobileNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(14), Validators.pattern(/^[+-]?\d+$/)]),
       charlyPoints: new FormControl(true, Validators.required),
+      schoolId: new FormControl('')
     });
+    this.staffForm.get('schoolId').setValue(this.schoolId);
   }
 
   async ionViewDidEnter() { }
@@ -58,7 +67,7 @@ export class AddStaffPage {
           if (data.success == true) {
             this.utilService.presentToast(data.message);
             // this.router.navigate(['qr-reader']);
-            this.router.navigate(['staff-directory']);
+            this.router.navigate(['/staff-directory', this.schoolId]);
           }
           loading.dismiss();
         },
