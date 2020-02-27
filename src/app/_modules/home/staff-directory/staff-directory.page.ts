@@ -90,6 +90,7 @@ export class StaffDirectoryPage {
   async  onInput(searchValue) {
     this.skeleton = true;
     this.searchText = searchValue;
+    this.page= 0;
     let params = {
       page: this.page,
       schoolId: this.schoolId,
