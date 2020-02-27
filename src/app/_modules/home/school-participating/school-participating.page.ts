@@ -20,7 +20,7 @@ export class SchoolParticipatingPage {
 
   loc: string = 'Tulsa';
 
-  searchText;
+  searchText: string = '';
 
   participatingSchool: Array<any> = [];
 
@@ -56,7 +56,11 @@ export class SchoolParticipatingPage {
 
   /**-------Data of participate schools------ */
   async getSchoolsList() {
-    let data = await this.schoolService.getSchoolList(this.page).toPromise();
+    let params = {
+      page: this.page,
+      query: this.searchText
+    }
+    let data = await this.schoolService.getSchoolList(params).toPromise();
     this.dataCount = data.dataCount;
     this.participatingSchool = data.data;
     this.skeleton = false;
@@ -66,8 +70,12 @@ export class SchoolParticipatingPage {
   loadMoreFeeds(event) {
     setTimeout(async () => {
       event.target.complete();
-      this.page += 1;
-      let data = await this.schoolService.getSchoolList(this.page).toPromise();
+      let params = {
+        page: this.page += 1,
+        query: this.searchText
+      }
+
+      let data = await this.schoolService.getSchoolList(params).toPromise();
       if (data.success == false) {
         event.target.disabled = true;
       }
@@ -78,6 +86,26 @@ export class SchoolParticipatingPage {
         }
       }
     }, 500);
+  }
+
+  async  onInput(searchValue) {
+    this.skeleton = true;
+    this.searchText = searchValue;
+    this.page= 0;
+    let params = {
+      page: this.page,
+      query: this.searchText
+    }
+    console.log(params)
+    let data = await this.schoolService.getSchoolList(params).toPromise();
+    this.dataCount = data.dataCount;
+    this.participatingSchool = data.data;
+    this.skeleton = false;
+  }
+
+  onClear() {
+    this.searchText = '';
+    this.ionViewDidEnter();
   }
 
 }

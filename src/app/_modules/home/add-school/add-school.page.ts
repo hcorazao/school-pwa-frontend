@@ -100,7 +100,7 @@ export class AddSchoolPage {
       let params = {
         mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
         email: "schoolPWA@gmail.com",
-        countryCode: 91
+        countryCode: 57
       }
       await this.authenticationService.sendOTP(params)
         .subscribe(

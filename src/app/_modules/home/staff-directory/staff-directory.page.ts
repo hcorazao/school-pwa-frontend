@@ -26,7 +26,7 @@ export class StaffDirectoryPage {
 
   page: number = 0;
 
-  searchText;
+  searchText: string = '';
 
   skeleton: boolean = true;
 
@@ -58,7 +58,8 @@ export class StaffDirectoryPage {
   async getStaffData() {
     let params = {
       page: this.page,
-      schoolId: this.schoolId
+      schoolId: this.schoolId,
+      query: this.searchText
     }
     let res = await this.schoolService.getStaff(params).toPromise();
     this.staffDirectories = res.data;
@@ -69,7 +70,12 @@ export class StaffDirectoryPage {
     setTimeout(async () => {
       event.target.complete();
       this.page += 1;
-      let res = await this.schoolService.getStaff(this.page).toPromise();
+      let params = {
+        page: this.page,
+        schoolId: this.schoolId,
+        query: this.searchText
+      }
+      let res = await this.schoolService.getStaff(params).toPromise();
       if (!res) {
         event.target.disabled = true;
       }
@@ -80,5 +86,22 @@ export class StaffDirectoryPage {
         }
       }
     }, 500);
+  }
+  async  onInput(searchValue) {
+    this.skeleton = true;
+    this.searchText = searchValue;
+    let params = {
+      page: this.page,
+      schoolId: this.schoolId,
+      query: this.searchText
+    }
+    console.log(params)
+    let res = await this.schoolService.getStaff(params).toPromise();
+    this.staffDirectories = res.data;
+    this.skeleton = false;
+  }
+
+  onClear() {
+    this.searchText = '';
   }
 }

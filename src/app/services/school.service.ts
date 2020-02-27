@@ -24,8 +24,8 @@ export class SchoolService {
     return this.http.post<any>(`${this.url}/school`, data);
   }
 
-  getSchoolList(page) {
-    return this.http.get<any>(`${this.url}/school/?page=` + page);
+  getSchoolList(data) {
+    return this.http.get<any>(`${this.url}/school/?page=${data.page}&q=${data.query}`);
   }
 
   addStaff(data) {
@@ -37,7 +37,7 @@ export class SchoolService {
   }
 
   getStaff(data) {
-    return this.http.get<any>(`${this.url}/staff/?page=${data.page}&schoolId=${data.schoolId}`);
+    return this.http.get<any>(`${this.url}/staff/?page=${data.page}&schoolId=${data.schoolId}&q=${data.query}`);
   }
 
 }

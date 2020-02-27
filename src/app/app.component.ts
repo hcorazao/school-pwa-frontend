@@ -31,6 +31,6 @@ export class AppComponent {
     // }
   }
   ngOnInit() {
-    this.router.navigate(['home']);
+    // this.router.navigate(['home']);
   }
 }

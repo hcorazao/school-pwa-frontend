@@ -22,7 +22,8 @@
     <ion-grid *ngIf="staffDirectories.length > 0">
       <ion-row>
         <ion-col class="ion-text-left">
-          <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"></ion-searchbar>
+          <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"
+            (ionInput)="onInput($event.target.value)" (ionClear)="onClear()"></ion-searchbar>
         </ion-col>
         <ion-col class="ion-text-right" style="margin: auto;">
           <a [routerLink]="['/add-staff']" class="add-school"> New Staff ></a>
