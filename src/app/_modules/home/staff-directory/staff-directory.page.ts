@@ -104,5 +104,6 @@ export class StaffDirectoryPage {
 
   onClear() {
     this.searchText = '';
+    this.ionViewDidEnter();
   }
 }

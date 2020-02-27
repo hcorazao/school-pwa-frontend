@@ -19,7 +19,7 @@
 <ion-content class="ion-padding">
   <div class="section"
     [ngClass]="{'landscape' : orientationType == 'landscape-primary', 'portrait' : orientationType == 'portrait-primary'}">
-    <ion-grid *ngIf="staffDirectories.length > 0">
+    <ion-grid >
       <ion-row>
         <ion-col class="ion-text-left">
           <ion-searchbar cancelButtonIcon showCancelButton="focus" [(ngModel)]="searchText"
