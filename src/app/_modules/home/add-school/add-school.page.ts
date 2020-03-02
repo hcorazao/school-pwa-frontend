@@ -40,6 +40,8 @@ export class AddSchoolPage {
 
   imageData;
 
+  authyId;
+
   public schoolTypes = [
     { id: 1, name: 'Public' },
     { id: 2, name: 'Private' },
@@ -108,6 +110,7 @@ export class AddSchoolPage {
             if (data.success == true) {
               this.utiService.presentToast(data.message);
               const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+              this.authyId = data.authyId;
               const modalOption: any = {
                 component: OtpVerificationComponent,
                 backdropDismiss: false,
@@ -197,7 +200,7 @@ export class AddSchoolPage {
     }
   }
 
-  async onSubmit(authyId) {
+  async onSubmit() {
     let loading = await this.loadingCtrl.create({
       message: "Creating school please wait..."
     });
@@ -213,7 +216,7 @@ export class AddSchoolPage {
     formData.append('mobileNumber', this.aboutOwnerForm.value.mobileNumber);
     formData.append('schoolDescription', this.schoolExposureForm.value.schoolDescription);
     formData.append('schoolAchievement', this.schoolExposureForm.value.schoolAchievement);
-    formData.append('authyId', authyId);
+    formData.append('authyId', this.authyId);
 
     // const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value, ...id };
     await this.schoolService.addSchool(formData)
