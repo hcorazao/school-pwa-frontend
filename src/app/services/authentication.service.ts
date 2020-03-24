@@ -3,10 +3,21 @@ import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 const { Device } = Plugins;
+import gql from "graphql-tag";
+import { Mutation } from 'apollo-angular';
+
+export type SMS = {
+  email: string;
+  mobileNumber: string;
+  countryCode: boolean;
+};
 
 @Injectable({
   providedIn: 'root'
 })
+
+
+
 export class AuthenticationService {
   url = environment.ApiURL;
   headers = new HttpHeaders({
@@ -20,7 +31,15 @@ export class AuthenticationService {
   }
 
   sendOTP(data) {
-    return this.http.post(`${this.url}/school/otp-send`, data)
+    document = gql`
+        mutation sendSms(${data}) {
+            email,
+      mobileNumber,
+      countryCode
+        }
+      `;
+    return document;
+    // return this.http.post(`${this.url}/school/otp-send`, data)
   }
 
   verifyOTP(data) {
@@ -31,4 +50,34 @@ export class AuthenticationService {
     return this.http.post(`${this.url}/school/image-upload/`, data);
   }
 
+}
+
+export type AddSMSMutation = {
+  sms: SMS;
+};
+
+export type AddSMSVariables = {
+  sendSms: {
+    email: string;
+    mobileNumber: string;
+    countryCode: boolean;
+  };
+};
+
+@Injectable({
+  providedIn: "root"
+})
+export class AddSchoolGQL extends Mutation<
+AddSMSMutation,
+AddSMSVariables
+> {
+  document = gql`
+    mutation sendSms($sendSms: sendSms!) {
+      sendSms(sendSms: "$sendSms") {
+        email,
+  mobileNumber,
+  countryCode
+      }
+    }
+  `;
 }

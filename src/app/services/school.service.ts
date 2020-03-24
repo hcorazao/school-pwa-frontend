@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 const { Device } = Plugins;
-
+import gql from "graphql-tag";
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +25,28 @@ export class SchoolService {
   }
 
   getSchoolList(data) {
-    return this.http.get<any>(`${this.url}/school/?page=${data.page}&q=${data.query}`);
+    console.log(data)
+    const query = gql`
+  query schools {
+    schools(page:${data.page},q:"${data.query}"){
+      staffPoints,
+  _id,
+  schoolName,
+  schoolType,
+  aboutSchoolFunds,
+  mobileNumber,
+  schoolDescription,
+  schoolAchievement,
+    }
+    schoolCount{
+      schoolPublic
+      schoolPrivate
+      schoolMagnet
+    }
+  }
+`;
+    return query;
+    // return this.http.get<any>(`${this.url}/school/?page=${data.page}&q=${data.query}`);
   }
 
   addStaff(data) {
@@ -33,11 +54,38 @@ export class SchoolService {
   }
 
   getSchoolbyId(id) {
-    return this.http.get<any>(`${this.url}/school/` + id);
+    const query = gql`
+  query singleSchool {
+    singleSchool(_id:"${id}"){
+      staffPoints,
+      _id,
+      schoolName,
+      schoolType,
+      aboutSchoolFunds,
+      mobileNumber,
+      schoolDescription,
+      schoolAchievement,
+    }
+  }
+`;
+    return query;
+    // return this.http.get<any>(`${this.url}/school/` + id);
   }
 
   getStaff(data) {
-    return this.http.get<any>(`${this.url}/staff/?page=${data.page}&schoolId=${data.schoolId}&q=${data.query}`);
+    const query = gql`
+    query StaffBySchoolId {
+      StaffBySchoolId(schoolId:"${data.schoolId}", page:${data.page},q:"${data.query}"){
+        _id,
+        schoolId,
+        staffName,
+        charlyPoints,
+        mobileNumber
+      }
+    }
+  `;
+    return query;
+    // return this.http.get<any>(`${this.url}/staff/?page=${data.page}&schoolId=${data.schoolId}&q=${data.query}`);
   }
 
 }

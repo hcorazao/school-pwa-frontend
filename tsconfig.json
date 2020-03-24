@@ -15,8 +15,16 @@
       "node_modules/@types"
     ],
     "lib": [
+      "esnext",
       "es2018",
       "dom"
+    ],
+    "plugins": [
+      {
+        "name": "ts-graphql-plugin",
+        "schema": "schema.json",
+        "tag": "gql"
+      }
     ]
   },
   "angularCompilerOptions": {

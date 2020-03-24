@@ -5,10 +5,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { LoadingController, ModalController } from '@ionic/angular';
 import { Motion } from '@capacitor/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AuthenticationService, AddSchoolGQL } from 'src/app/services/authentication.service';
 import { OtpVerificationComponent } from 'src/app/shared/components/otp-verification/otp-verification.component';
 import { SchoolService } from '../../../services/school.service';
 import { first } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';  // Apollo client service
 @Component({
   selector: 'app-add-school',
   templateUrl: 'add-school.page.html',
@@ -57,7 +58,9 @@ export class AddSchoolPage {
     private formBuilder: FormBuilder,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
-    public utiService: UtilService
+    public utiService: UtilService,
+    private apollo: Apollo,
+    public addSchoolQuery: AddSchoolGQL
   ) {
     this.orientationType = this.screenOrientation.type;
     Motion.addListener('orientation', (event: OrientationType) => {
@@ -99,45 +102,94 @@ export class AddSchoolPage {
     }
     else {
       this.utilService.showLoading();
-      let params = {
-        mobileNumber: parseInt(this.aboutOwnerForm.value.mobileNumber),
+      let params: any = {
+        mobileNumber: this.aboutOwnerForm.value.mobileNumber,
         email: "schoolPWA@gmail.com",
         countryCode: 57
       }
-      await this.authenticationService.sendOTP(params)
-        .subscribe(
-          async (data: any) => {
-            if (data.success == true) {
-              this.utiService.presentToast(data.message);
-              const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
-              this.authyId = data.authyId;
-              const modalOption: any = {
-                component: OtpVerificationComponent,
-                backdropDismiss: false,
-                componentProps: {
-                  data: formData,
-                  authyId: data.authyId,
-                  ev: ev
-                },
-              };
-              const modal = await this.modalCtrl.create(modalOption);
-              modal.onDidDismiss().then(async (res) => {
-                if (res.data == 'verified') {
-                  this.stepCount = this.stepCount + 1;
-                  this.onStpes();
-                }
-              });
-              return await modal.present();
-            }
-            else {
-              this.utiService.error(data.message);
+      this.addSchoolQuery
+        .mutate(
+          {
+            sendSms: {
+              ...params,
             }
           },
+        ) .subscribe(
+          ({ data }) => {
+            console.log("got data", data);
+          },
           error => {
-            if (error.error == undefined) {
-              this.utiService.error(error);
-            } else { this.utiService.error(error.error); }
-          });
+            console.log("there was an error sending the query " + error);
+          }
+        );
+      // let query = this.authenticationService.sendOTP(params);
+      // console.log(query)
+      // this.apollo.query({ query })
+      //   .subscribe(async (data: any) => {
+      //     console.log(data)
+      //     if (data.errors) {
+      //       this.utiService.error(data.errors);
+      //     }
+      //     else {
+      //       this.utiService.presentToast(data.message);
+      //       const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+      //       this.authyId = data.authyId;
+      //       const modalOption: any = {
+      //         component: OtpVerificationComponent,
+      //         backdropDismiss: false,
+      //         componentProps: {
+      //           data: formData,
+      //           authyId: data.authyId,
+      //           ev: ev
+      //         },
+      //       };
+      //       const modal = await this.modalCtrl.create(modalOption);
+      //       modal.onDidDismiss().then(async (res) => {
+      //         if (res.data == 'verified') {
+      //           this.stepCount = this.stepCount + 1;
+      //           this.onStpes();
+      //         }
+      //       });
+      //       return await modal.present();
+      //     }
+      //   },
+      //     error => {
+      //       this.utiService.error(error);
+      //     })
+      // await this.authenticationService.sendOTP(params)
+      //   .subscribe(
+      //     async (data: any) => {
+      //       if (data.success == true) {
+      //         this.utiService.presentToast(data.message);
+      //         const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+      //         this.authyId = data.authyId;
+      //         const modalOption: any = {
+      //           component: OtpVerificationComponent,
+      //           backdropDismiss: false,
+      //           componentProps: {
+      //             data: formData,
+      //             authyId: data.authyId,
+      //             ev: ev
+      //           },
+      //         };
+      //         const modal = await this.modalCtrl.create(modalOption);
+      //         modal.onDidDismiss().then(async (res) => {
+      //           if (res.data == 'verified') {
+      //             this.stepCount = this.stepCount + 1;
+      //             this.onStpes();
+      //           }
+      //         });
+      //         return await modal.present();
+      //       }
+      //       else {
+      //         this.utiService.error(data.message);
+      //       }
+      //     },
+      //     error => {
+      //       if (error.error == undefined) {
+      //         this.utiService.error(error);
+      //       } else { this.utiService.error(error.error); }
+      //     });
     }
 
   }

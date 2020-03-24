@@ -14,6 +14,18 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { ErrorInterceptor } from './_helpers';
 import { SchoolService } from './services/school.service';
 import { HomePageModule } from './_modules/home/home.module';
+import ApolloClient from 'apollo-client';
+import {HttpLink, HttpLinkModule} from 'apollo-angular-link-http';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+
+export function createApollo(httpLink: HttpLink) {
+  // https://api.graph.cool/simple/v1/cipglmpu146dt01mzwqctkbwd'
+  return {
+    link: httpLink.create({uri: 'http://192.168.1.12:3000'}),
+    cache: new InMemoryCache(),
+  };
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +35,8 @@ import { HomePageModule } from './_modules/home/home.module';
     AppRoutingModule,
     HttpClientModule,
     HomePageModule,
+    ApolloModule,
+    HttpLinkModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
@@ -30,6 +44,10 @@ import { HomePageModule } from './_modules/home/home.module';
     HttpClient,
     ScreenOrientation,
     SchoolService,
+    { provide: APOLLO_OPTIONS,
+      useFactory: createApollo,
+      deps: [HttpLink]
+    },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
