@@ -86,22 +86,7 @@ export class AddStaffPage {
       this.router.navigate(['/staff-directory', this.schoolId]);
       loading.dismiss();
     })
-    // await this.schoolService.addStaff(this.staffForm.value)
-    //   .subscribe(
-    //     async data => {
-    //       if (data.success == true) {
-    //         this.utilService.presentToast(data.message);
-    //         // this.router.navigate(['qr-reader']);
-    //         this.router.navigate(['/staff-directory', this.schoolId]);
-    //       }
-    //       loading.dismiss();
-    //     },
-    //     error => {
-    //       loading.dismiss();
-    //       if (error.error == undefined) {
-    //         this.utilService.error(error);
-    //       } else { this.utilService.error(error.error); }
-    //     });
+    
   }
 
   validation_messages = {

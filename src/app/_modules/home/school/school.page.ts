@@ -16,7 +16,7 @@ export class SchoolPage {
 
   image: any;
 
-  apiUrl = environment.graphQl;
+  apiUrl = environment.graphQlImages;
 
   orientationType
 
