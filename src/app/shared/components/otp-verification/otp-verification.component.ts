@@ -5,6 +5,8 @@ import { UtilService } from "../../../services/util.service";
 import { first } from "rxjs/operators";
 import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
 @Component({
   selector: 'app-otp-verification',
   templateUrl: './otp-verification.component.html',
@@ -29,6 +31,7 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
     public authenticationService: AuthenticationService,
     public loadingCtrl: LoadingController,
     public router: Router,
+    private apollo: Apollo,
     public modalCtrl: ModalController) {
 
     let params = navParams.data;
@@ -64,19 +67,34 @@ export class OtpVerificationComponent implements OnInit, OnDestroy {
       otp: this.otpForm.value.otp,
       authyId: this.authyId
     }
-    await this.authenticationService.verifyOTP(params)
-      .subscribe(
-        async data => {
-          loading.dismiss();
-          this.verified = true;
-          // this.router.navigate(['school']);
-        },
-        error => {
-          loading.dismiss();
-          if (error.error == undefined) {
-            this.utilService.error(error);
-          } else { this.utilService.error(error.error); }
-        });
+    this.apollo.mutate({
+      mutation: gql`mutation{
+        verifySms(
+        id:"${this.authyId}",
+        otp: "${this.otpForm.value.otp}",
+        ){
+          success
+          message
+          authyId
+        }
+      }`
+    }).subscribe(async (smsRes) => {
+      loading.dismiss();
+      this.verified = true;
+    })
+    // await this.authenticationService.verifyOTP(params)
+    //   .subscribe(
+    //     async data => {
+    //       loading.dismiss();
+    //       this.verified = true;
+    //       // this.router.navigate(['school']);
+    //     },
+    //     error => {
+    //       loading.dismiss();
+    //       if (error.error == undefined) {
+    //         this.utilService.error(error);
+    //       } else { this.utilService.error(error.error); }
+    //     });
   }
 
   async back() {

@@ -8,6 +8,8 @@ import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Motion } from '@capacitor/core';
 import { SchoolService } from 'src/app/services/school.service';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
 
 @Component({
   selector: 'app-add-staff',
@@ -31,7 +33,8 @@ export class AddStaffPage {
     public utilService: UtilService,
     private formBuilder: FormBuilder,
     public loadingCtrl: LoadingController,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private apollo: Apollo,
   ) {
 
     this.orientationType = this.screenOrientation.type;
@@ -61,22 +64,44 @@ export class AddStaffPage {
       message: "Creating staff please wait..."
     });
     loading.present();
-    await this.schoolService.addStaff(this.staffForm.value)
-      .subscribe(
-        async data => {
-          if (data.success == true) {
-            this.utilService.presentToast(data.message);
-            // this.router.navigate(['qr-reader']);
-            this.router.navigate(['/staff-directory', this.schoolId]);
-          }
-          loading.dismiss();
-        },
-        error => {
-          loading.dismiss();
-          if (error.error == undefined) {
-            this.utilService.error(error);
-          } else { this.utilService.error(error.error); }
-        });
+
+    this.apollo.mutate<any>({
+      mutation: gql`mutation{
+        addStaff(
+          schoolId: "${this.schoolId}",
+          staffName: "${this.staffForm.value.staffName}",
+          charlyPoints: ${this.staffForm.value.charlyPoints},
+          mobileNumber: "${this.staffForm.value.mobileNumber}"
+        ){
+          _id
+          schoolId
+          staffName 
+          charlyPoints
+          mobileNumber
+        }
+      }`,
+
+    }).subscribe(async (schoolRes) => {
+      this.utilService.presentToast('Staff Added Successfully!');
+      this.router.navigate(['/staff-directory', this.schoolId]);
+      loading.dismiss();
+    })
+    // await this.schoolService.addStaff(this.staffForm.value)
+    //   .subscribe(
+    //     async data => {
+    //       if (data.success == true) {
+    //         this.utilService.presentToast(data.message);
+    //         // this.router.navigate(['qr-reader']);
+    //         this.router.navigate(['/staff-directory', this.schoolId]);
+    //       }
+    //       loading.dismiss();
+    //     },
+    //     error => {
+    //       loading.dismiss();
+    //       if (error.error == undefined) {
+    //         this.utilService.error(error);
+    //       } else { this.utilService.error(error.error); }
+    //     });
   }
 
   validation_messages = {

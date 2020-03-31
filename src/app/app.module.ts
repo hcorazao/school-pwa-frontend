@@ -22,7 +22,7 @@ import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 export function createApollo(httpLink: HttpLink) {
   // https://api.graph.cool/simple/v1/cipglmpu146dt01mzwqctkbwd'
   return {
-    link: httpLink.create({uri: 'http://192.168.1.12:3000'}),
+    link: httpLink.create({uri: environment.graphQl}),
     cache: new InMemoryCache(),
   };
 }

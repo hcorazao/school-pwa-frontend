@@ -9,7 +9,7 @@ import { Mutation } from 'apollo-angular';
 export type SMS = {
   email: string;
   mobileNumber: string;
-  countryCode: boolean;
+  countryCode: string;
 };
 
 @Injectable({
@@ -60,7 +60,7 @@ export type AddSMSVariables = {
   sendSms: {
     email: string;
     mobileNumber: string;
-    countryCode: boolean;
+    countryCode: string;
   };
 };
 
@@ -72,12 +72,21 @@ AddSMSMutation,
 AddSMSVariables
 > {
   document = gql`
-    mutation sendSms($sendSms: sendSms!) {
-      sendSms(sendSms: "$sendSms") {
-        email,
-  mobileNumber,
-  countryCode
-      }
+  mutation sendSms($sendSms: sendSms!) {
+    sendSms(sendSms: $sendSms) {
+     mobileNumber,
+     email,
+     countryCode
     }
-  `;
+  }
+`;
+  // document = gql`
+  //   mutation sendSms($sendSms: sendSms!) {
+  //     sendSms(sendSms: "$sendSms") {
+  //       email,
+  // mobileNumber,
+  // countryCode
+  //     }
+  //   }
+  // `;
 }

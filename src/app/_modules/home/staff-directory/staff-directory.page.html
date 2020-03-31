@@ -26,7 +26,7 @@
             (ionInput)="onInput($event.target.value)" (ionClear)="onClear()"></ion-searchbar>
         </ion-col>
         <ion-col class="ion-text-right" style="margin: auto;">
-          <a [routerLink]="['/add-staff']" class="add-school"> New Staff ></a>
+          <a [routerLink]="['/add-staff', schoolId]" class="add-school"> New Staff ></a>
         </ion-col>
       </ion-row>
     </ion-grid>

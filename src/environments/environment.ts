@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   url:'https://school-pwa-backend.herokuapp.com/',
-  ApiURL: 'https://school-pwa-backend.herokuapp.com/api/v1'
+  ApiURL: 'https://school-pwa-backend.herokuapp.com/api/v1',
+  graphQl:'https://school-pwa-graphql.herokuapp.com'
 };
 
 /*

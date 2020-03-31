@@ -52,8 +52,13 @@ export class StaffDirectoryPage {
   }
 
   ngOnInit() { }
-
+  ionViewWillEnter() {
+    console.log('nnn')
+  }
   async ionViewDidEnter() {
+    console.log('ent')
+   
+    this.page = 0;
     this.getStaffData();
   }
 

@@ -65,6 +65,7 @@ export class SchoolService {
       mobileNumber,
       schoolDescription,
       schoolAchievement,
+      photo
     }
   }
 `;

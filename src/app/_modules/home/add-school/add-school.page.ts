@@ -10,6 +10,7 @@ import { OtpVerificationComponent } from 'src/app/shared/components/otp-verifica
 import { SchoolService } from '../../../services/school.service';
 import { first } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';  // Apollo client service
+import gql from 'graphql-tag';
 @Component({
   selector: 'app-add-school',
   templateUrl: 'add-school.page.html',
@@ -48,7 +49,7 @@ export class AddSchoolPage {
     { id: 2, name: 'Private' },
     { id: 3, name: 'Magnet' },
   ]
-  orientationType;;
+  orientationType;
   constructor(
     private authenticationService: AuthenticationService,
     public screenOrientation: ScreenOrientation,
@@ -107,21 +108,60 @@ export class AddSchoolPage {
         email: "schoolPWA@gmail.com",
         countryCode: 57
       }
-      this.addSchoolQuery
-        .mutate(
-          {
-            sendSms: {
-              ...params,
-            }
-          },
-        ) .subscribe(
-          ({ data }) => {
-            console.log("got data", data);
-          },
-          error => {
-            console.log("there was an error sending the query " + error);
+      this.apollo.mutate({
+        mutation: gql`mutation{
+          sendSms(
+            email:"test@gmail.com"
+            mobileNumber:"${this.aboutOwnerForm.value.mobileNumber}"
+            countryCode:"91"
+          ){
+            success
+            message
+            authyId
           }
-        );
+        }`
+      }).subscribe(async (smsRes) => {
+        console.log(smsRes)
+        this.utiService.presentToast(smsRes.data.sendSms.message);
+        const formData = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value };
+        this.authyId = smsRes.data.sendSms.authyId;
+        const modalOption: any = {
+          component: OtpVerificationComponent,
+          backdropDismiss: false,
+          componentProps: {
+            data: formData,
+            authyId: smsRes.data.sendSms.authyId,
+            ev: ev
+          },
+        };
+        const modal = await this.modalCtrl.create(modalOption);
+        modal.onDidDismiss().then(async (res) => {
+          if (res.data == 'verified') {
+            this.stepCount = this.stepCount + 1;
+            this.onStpes();
+          }
+        });
+        return await modal.present();
+      },
+        error => {
+          this.utiService.error(error);
+        })
+
+      // this.addSchoolQuery
+      //   .mutate(
+      //     {
+      //       sendSms: {
+      //         ...params,
+      //       }
+      //     },
+      //   ) .subscribe(
+      //     ({ data }) => {
+      //       console.log("got data", data);
+      //     },
+      //     error => {
+      //       console.log("there was an error sending the query " + error);
+      //     }
+      //   );
       // let query = this.authenticationService.sendOTP(params);
       // console.log(query)
       // this.apollo.query({ query })
@@ -243,6 +283,7 @@ export class AddSchoolPage {
       let reader = new FileReader();
       reader.onload = (_event) => {
         this.image = reader.result;
+        console.log(event.target.files)
       }
       let params = { value: event.target.files[0], filename: name }
       this.schoolExposureForm.value.photo = params;
@@ -271,20 +312,57 @@ export class AddSchoolPage {
     formData.append('authyId', this.authyId);
 
     // const params = { ...this.aboutSchoolForm.value, ...this.schoolFundForm.value, ...this.aboutOwnerForm.value, ...this.schoolExposureForm.value, ...id };
-    await this.schoolService.addSchool(formData)
-      .subscribe((data: any) => {
-        if (data.success == true) {
-          this.utiService.presentToast(data.message);
-          this.router.navigate(['/school', data.data._id]);
-          loading.dismiss();
+    // await this.schoolService.addSchool(formData)
+    //   .subscribe((data: any) => {
+    //     if (data.success == true) {
+    //       this.utiService.presentToast(data.message);
+    //       this.router.navigate(['/school', data.data._id]);
+    //       loading.dismiss();
+    //     }
+    //   },
+    //     error => {
+    //       loading.dismiss();
+    //       if (error.error == undefined) {
+    //         this.utiService.error(error);
+    //       } else { this.utiService.error(error.error); }
+    //     });
+    console.log(this.imageData)
+    let fileData = this.imageData;
+    console.log(fileData)
+    this.apollo.mutate<any>({
+      mutation: gql`mutation($photo:Upload!){
+        addSchool(
+          schoolName: "${this.aboutSchoolForm.value.schoolName}",
+          schoolType: "${this.aboutSchoolForm.value.schoolType}",
+          schoolLocation: "${this.aboutSchoolForm.value.schoolLocation}",
+          aboutSchoolFunds: "${this.schoolFundForm.value.aboutSchoolFunds}",
+          staffPoints: ${this.schoolFundForm.value.staffPoints},
+          fullName: "${this.aboutOwnerForm.value.fullName}",
+          mobileNumber: "${this.aboutOwnerForm.value.mobileNumber}",
+          photo: $photo,
+          schoolDescription:  "${this.schoolExposureForm.value.schoolDescription}",
+          schoolAchievement: "${this.schoolExposureForm.value.schoolAchievement}",
+          authyId: "${this.authyId}"
+        ){
+          _id
+          schoolName
+          schoolType
+          schoolLocation
+          aboutSchoolFunds
         }
+      }`,
+      variables: {
+        photo: this.imageData
       },
-        error => {
-          loading.dismiss();
-          if (error.error == undefined) {
-            this.utiService.error(error);
-          } else { this.utiService.error(error.error); }
-        });
+      context: {
+        useMultipart: true
+      }
+
+    }).subscribe(async (schoolRes) => {
+      this.utiService.presentToast('School Added Successfully!');
+      this.router.navigate(['/school', schoolRes.data.addSchool._id]);
+      loading.dismiss();
+    })
   }
 
   validation_messages = {
